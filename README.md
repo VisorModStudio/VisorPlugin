@@ -45,19 +45,19 @@ Permission: **`visor.admin`** (default: ops)
 |-----|---------|-------------------------------------------------------------------------|
 | `serverDebug` | `false` | Verbose logging of Visor                                                |
 | `vrOnly` | `false` | Kick non-VR players (ops exempt)                                        |
-| `twoHandedVR` | `true` | Enable the off-hand slot for two-handed VR                              |
-| `betterSwinging` | `true` | VR-accurate melee attacks and block breaking                            |
-| `swingingRepairDelay` | `400` | Ticks before an unfinished VR block break "heals"                       |
-| `roomCrawlingSupported` | `true` | Allow room-scale crawling (forced crawl/swim pose)                      |
-| `roomClimbingSupported` | `true` | Allow room-scale climbing (resets fall distance)                        |
-| `pvpVRvsVanilla` | `true` | Allow PvP between a VR player and a non-VR player                       |
-| `pvpVRvsVR` | `true` | Allow PvP between two VR players                                        |
+| `twoHandedVR` | `false` | Enable the off-hand slot for two-handed VR                              |
+| `betterSwinging` | `true`  | VR-accurate melee attacks and block breaking                            |
+| `swingingRepairDelay` | `400`   | Ticks before an unfinished VR block break "heals"                       |
+| `roomCrawlingSupported` | `true`  | Allow room-scale crawling (forced crawl/swim pose)                      |
+| `roomClimbingSupported` | `true`  | Allow room-scale climbing (resets fall distance)                        |
+| `pvpVRvsVanilla` | `true`  | Allow PvP between a VR player and a non-VR player                       |
+| `pvpVRvsVR` | `true`  | Allow PvP between two VR players                                        |
 | `notifyPvpBlocked` | `false` | Message the attacker when PvP is blocked                                |
-| `creeperSwellDistance` | `1.75` | Creepers swell within this distance of a VR player's head. (`0` disables) |
-| `supportedMovement` | `BOTH` | `CONTROLLER`, `TELEPORT`, or `BOTH`                                     |
-| `teleportUpLimit` | `1` | Teleport-move vertical-up limit (blocks)                                |
-| `teleportDownLimit` | `4` | Teleport-move vertical-down limit (blocks)                              |
-| `teleportForwardLimit` | `16` | Teleport-move forward limit (blocks)                                    |
+| `creeperSwellDistance` | `1.75`  | Creepers swell within this distance of a VR player's head. (`0` disables) |
+| `supportedMovement` | `BOTH`  | `CONTROLLER`, `TELEPORT`, or `BOTH`                                     |
+| `teleportUpLimit` | `1`     | Teleport-move vertical-up limit (blocks)                                |
+| `teleportDownLimit` | `4`     | Teleport-move vertical-down limit (blocks)                              |
+| `teleportForwardLimit` | `16`    | Teleport-move forward limit (blocks)                                    |
 
 ```bash
 ./gradlew build

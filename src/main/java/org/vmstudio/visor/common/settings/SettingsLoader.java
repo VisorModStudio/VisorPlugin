@@ -100,7 +100,7 @@ public final class SettingsLoader {
             serverDebug: false
             vrOnly: false
 
-            twoHandedVR: true
+            twoHandedVR: false
             betterSwinging: true
             swingingRepairDelay: 400
 
