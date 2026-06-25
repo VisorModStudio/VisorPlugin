@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '9.0.0'
+}
+
+group = 'org.vmstudio.visor'
+version = '0.5.0'
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+    implementation 'org.yaml:snakeyaml:2.3'
+
+    runtimeOnly project(path: ':nms-v1_20_R1', configuration: 'reobf')
+    runtimeOnly project(path: ':nms-v1_21_1', configuration: 'reobf')
+    runtimeOnly project(path: ':nms-v1_21_3', configuration: 'reobf')
+    runtimeOnly project(path: ':nms-v1_21_4', configuration: 'reobf')
+    runtimeOnly project(path: ':nms-v1_21_5', configuration: 'reobf')
+    runtimeOnly project(path: ':nms-v1_21_6', configuration: 'reobf')
+    runtimeOnly project(path: ':nms-v1_21_7', configuration: 'reobf')
+    runtimeOnly project(path: ':nms-v1_21_8', configuration: 'reobf')
+    runtimeOnly project(path: ':nms-v1_21_9', configuration: 'reobf')
+    runtimeOnly project(path: ':nms-v1_21_10', configuration: 'reobf')
+    runtimeOnly project(path: ':nms-v1_21_11', configuration: 'reobf')
+
+    testImplementation platform('org.junit:junit-bom:5.11.3')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.named('processResources') {
+    def props = [version: project.version.toString()]
+    inputs.properties(props)
+    filesMatching('plugin.yml') {
+        expand(props)
+    }
+}
+
+shadowJar {
+    archiveBaseName = 'VisorPlugin'
+    archiveClassifier = ''
+    relocate 'org.yaml.snakeyaml', 'org.vmstudio.libs.snakeyaml'
+}
+
+tasks.named('build') {
+    dependsOn(tasks.named('shadowJar'))
+}
