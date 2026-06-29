@@ -10,6 +10,7 @@ import org.vmstudio.visor.bukkit.listener.PvpListener;
 import org.vmstudio.visor.bukkit.listener.VisorChannelListener;
 import org.vmstudio.visor.bukkit.listener.VisorLifecycleListener;
 import org.vmstudio.visor.bukkit.logger.BukkitLogger;
+import org.vmstudio.visor.bukkit.platform.BukkitPlatformPlayer;
 import org.vmstudio.visor.bukkit.platform.BukkitPlatformServer;
 import org.vmstudio.visor.common.VisorServer;
 import org.vmstudio.visor.common.settings.SettingsLoader;
@@ -46,7 +47,9 @@ public final class VisorBukkitPlugin extends JavaPlugin {
                 new VisorChannelListener(platform, visor));
         getServer().getPluginManager().registerEvents(new VisorLifecycleListener(platform, visor), this);
         getServer().getPluginManager().registerEvents(new PvpListener(visor), this);
-        getCommand("visor").setExecutor(new VisorCommand(visor, settingsFile, logger));
+        VisorCommand visorCommand = new VisorCommand(visor, settingsFile, logger);
+        getCommand("visor").setExecutor(visorCommand);
+        getCommand("visor").setTabCompleter(visorCommand);
 
         visor.start();
 
@@ -57,6 +60,7 @@ public final class VisorBukkitPlugin extends JavaPlugin {
     @Override
     public void onDisable(){
         if(visor != null){
+            BukkitPlatformPlayer.removeAllDebug(getServer());
             if(prefsFile != null){
                 getLogger().info("Persisting " + visor.prefs().snapshot().size() + " VR prefs to " + prefsFile);
                 PrefsFile.save(prefsFile, visor.prefs().snapshot());

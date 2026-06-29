@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import org.vmstudio.visor.bukkit.logger.BukkitLogger;
+import org.vmstudio.visor.bukkit.platform.BukkitPlatformPlayer;
 import org.vmstudio.visor.common.VisorServer;
 import org.vmstudio.visor.common.session.VisorSession;
 import org.vmstudio.visor.common.settings.SettingsLoader;
@@ -33,7 +34,7 @@ public final class VisorCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                              @NotNull String label, String[] args){
         if(args.length == 0){
-            sender.sendMessage("§bVisor §7- /visor reload | status");
+            sender.sendMessage("§bVisor §7- /visor reload | status | trackers");
             return true;
         }
         switch(args[0].toLowerCase(Locale.ROOT)){
@@ -52,7 +53,18 @@ public final class VisorCommand implements CommandExecutor, TabCompleter {
                 long total = visor.sessions().all().size();
                 sender.sendMessage("§bVisor §7- sessions: §f" + total + " §7(VR: §f" + vr + "§7)");
             }
-            default -> sender.sendMessage("§7Unknown subcommand. /visor reload | status");
+            case "trackers" -> {
+                if(!sender.hasPermission(PERMISSION)){
+                    sender.sendMessage("§cYou don't have permission.");
+                    return true;
+                }
+                boolean on = visor.toggleTrackerDebug();
+                if(!on){
+                    BukkitPlatformPlayer.removeAllDebug(sender.getServer());
+                }
+                sender.sendMessage("§bVisor §7- tracker debug: " + (on ? "§aON" : "§cOFF"));
+            }
+            default -> sender.sendMessage("§7Unknown subcommand. /visor reload | status | trackers");
         }
         return true;
     }
@@ -62,7 +74,7 @@ public final class VisorCommand implements CommandExecutor, TabCompleter {
                                       @NotNull String label, String[] args){
         if(args.length == 1){
             String prefix = args[0].toLowerCase(Locale.ROOT);
-            return Stream.of("reload", "status").filter(s -> s.startsWith(prefix)).toList();
+            return Stream.of("reload", "status", "trackers").filter(s -> s.startsWith(prefix)).toList();
         }
         return List.of();
     }

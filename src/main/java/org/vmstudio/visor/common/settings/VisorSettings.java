@@ -15,7 +15,8 @@ public record VisorSettings(
         SupportedMovement supportedMovement,
         int teleportUpLimit,
         int teleportDownLimit,
-        int teleportForwardLimit){
+        int teleportForwardLimit,
+        boolean trackersSupported){
 
     public static VisorSettings defaults(){
         return new VisorSettings(
@@ -33,7 +34,8 @@ public record VisorSettings(
                 SupportedMovement.BOTH,
                 1,
                 4,
-                16);
+                16,
+                true);
     }
 
     public String toClientYaml(){
@@ -47,6 +49,7 @@ public record VisorSettings(
                 + "pvpVRvsVR: " + pvpVRvsVR + '\n'
                 + "notifyPvpBlocked: " + notifyPvpBlocked + '\n'
                 + "creeperSwellDistance: " + creeperSwellDistance + '\n'
-                + "supportedMovement: " + supportedMovement.name() + '\n';
+                + "supportedMovement: " + supportedMovement.name() + '\n'
+                + "trackersSupported: " + trackersSupported + '\n';
     }
 }

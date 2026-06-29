@@ -51,7 +51,8 @@ public final class SettingsLoader {
                 movement(m, "supportedMovement", d.supportedMovement()),
                 intv(m, "teleportUpLimit", d.teleportUpLimit()),
                 intv(m, "teleportDownLimit", d.teleportDownLimit()),
-                intv(m, "teleportForwardLimit", d.teleportForwardLimit()));
+                intv(m, "teleportForwardLimit", d.teleportForwardLimit()),
+                bool(m, "trackersSupported", d.trackersSupported()));
     }
 
     private static boolean bool(Map<?, ?> m, String key, boolean def){
@@ -119,5 +120,7 @@ public final class SettingsLoader {
             teleportUpLimit: 1
             teleportDownLimit: 4
             teleportForwardLimit: 16
+
+            trackersSupported: true
             """;
 }

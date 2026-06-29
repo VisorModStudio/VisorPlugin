@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.vmstudio.visor.protocol.DirectionValue;
+import org.vmstudio.visor.protocol.value.PoseData;
 import org.vmstudio.visor.protocol.value.VBlockPos;
 
 public interface PlatformPlayer {
@@ -32,6 +33,10 @@ public interface PlatformPlayer {
     void tickEffects();
 
     void swellNearbyCreepers(double distance, double hmdOffsetX, double hmdOffsetY, double hmdOffsetZ);
+
+    void showTrackerDebug(PoseData pose);
+
+    void clearTrackerDebug();
 
     Set<PlatformPlayer> trackers();
 }

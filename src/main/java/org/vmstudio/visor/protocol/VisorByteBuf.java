@@ -46,6 +46,15 @@ public final class VisorByteBuf {
         return this;
     }
 
+    public VisorByteBuf writeVarInt(int value){
+        while((value & ~0x7F) != 0){
+            writeByte((value & 0x7F) | 0x80);
+            value >>>= 7;
+        }
+        writeByte(value);
+        return this;
+    }
+
     public VisorByteBuf writeLong(long value){
         ensure(8);
         for(int shift = 56; shift >= 0; shift -= 8){
@@ -107,6 +116,21 @@ public final class VisorByteBuf {
                 | ((buf[readerIndex++] & 0xFF) << 16)
                 | ((buf[readerIndex++] & 0xFF) << 8)
                 | (buf[readerIndex++] & 0xFF);
+    }
+
+    public int readVarInt(){
+        int value = 0;
+        int position = 0;
+        byte b;
+        do {
+            b = readByte();
+            value |= (b & 0x7F) << position;
+            position += 7;
+            if(position > 35){
+                throw new IllegalArgumentException("VarInt too big");
+            }
+        }while((b & 0x80) != 0);
+        return value;
     }
 
     public long readLong(){

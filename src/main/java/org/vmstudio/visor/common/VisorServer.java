@@ -27,6 +27,7 @@ public final class VisorServer {
     private final TrackerBroadcaster broadcaster;
 
     private volatile VisorSettings settings;
+    private volatile boolean trackerDebug;
     private Cancellable tickTask;
 
     public VisorServer(PlatformServer platform, VisorSettings settings){
@@ -80,7 +81,20 @@ public final class VisorServer {
     }
 
     public void onQuit(UUID uuid){
+        VisorSession session = sessions.get(uuid);
+        if(session != null && session.vrActive()){
+            session.player().clearTrackerDebug();
+        }
         sessions.remove(uuid);
+    }
+
+    public boolean toggleTrackerDebug(){
+        trackerDebug = !trackerDebug;
+        return trackerDebug;
+    }
+
+    public boolean trackerDebug(){
+        return trackerDebug;
     }
 
     public VisorSettings settings(){
@@ -122,9 +136,12 @@ public final class VisorServer {
         session.player().tickEffects();
 
         VrState vr = session.vr();
-        if(s.creeperSwellDistance() > 0 && vr.pose() != null){
+        if(!trackerDebug && s.creeperSwellDistance() > 0 && vr.pose() != null){
             Vec3f hmd = vr.pose().hmd().position();
             session.player().swellNearbyCreepers(s.creeperSwellDistance(), hmd.x(), hmd.y(), hmd.z());
+        }
+        if(trackerDebug){
+            session.player().showTrackerDebug(vr.pose());
         }
     }
 }
