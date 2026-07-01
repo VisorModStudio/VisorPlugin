@@ -10,17 +10,22 @@ dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
     implementation 'org.yaml:snakeyaml:2.3'
 
-    runtimeOnly project(path: ':nms-v1_20_R1', configuration: 'reobf')
-    runtimeOnly project(path: ':nms-v1_21_1', configuration: 'reobf')
-    runtimeOnly project(path: ':nms-v1_21_3', configuration: 'reobf')
-    runtimeOnly project(path: ':nms-v1_21_4', configuration: 'reobf')
-    runtimeOnly project(path: ':nms-v1_21_5', configuration: 'reobf')
-    runtimeOnly project(path: ':nms-v1_21_6', configuration: 'reobf')
-    runtimeOnly project(path: ':nms-v1_21_7', configuration: 'reobf')
-    runtimeOnly project(path: ':nms-v1_21_8', configuration: 'reobf')
-    runtimeOnly project(path: ':nms-v1_21_9', configuration: 'reobf')
-    runtimeOnly project(path: ':nms-v1_21_10', configuration: 'reobf')
-    runtimeOnly project(path: ':nms-v1_21_11', configuration: 'reobf')
+    compileOnly 'org.projectlombok:lombok:1.18.38'
+    annotationProcessor 'org.projectlombok:lombok:1.18.38'
+    testCompileOnly 'org.projectlombok:lombok:1.18.38'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.38'
+
+    runtimeOnly project(path: ':versions:nms-v1_20_R1', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_1', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_3', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_4', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_5', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_6', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_7', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_8', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_9', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_10', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_11', configuration: 'reobf')
 
     testImplementation platform('org.junit:junit-bom:5.11.3')
     testImplementation 'org.junit.jupiter:junit-jupiter'

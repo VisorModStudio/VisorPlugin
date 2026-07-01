@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Map;
 
+import org.vmstudio.visor.api.player.SupportedMovement;
 import org.vmstudio.visor.common.platform.VisorLogger;
 import org.yaml.snakeyaml.Yaml;
 
@@ -97,16 +98,16 @@ public final class SettingsLoader {
     }
 
     private static final String DEFAULT_YAML = """
-            # Visor server settings
+            # Visor Plugin
             serverDebug: false
             vrOnly: false
 
             twoHandedVR: false
-            betterSwinging: true
+            betterSwinging: false
             swingingRepairDelay: 400
 
-            roomCrawlingSupported: true
-            roomClimbingSupported: true
+            roomCrawlingSupported: false
+            roomClimbingSupported: false
 
             pvpVRvsVanilla: true
             pvpVRvsVR: true
@@ -115,12 +116,12 @@ public final class SettingsLoader {
             creeperSwellDistance: 1.75
 
             # CONTROLLER | TELEPORT | BOTH
-            supportedMovement: BOTH
+            supportedMovement: CONTROLLER
 
             teleportUpLimit: 1
             teleportDownLimit: 4
             teleportForwardLimit: 16
 
-            trackersSupported: true
+            trackersSupported: false
             """;
 }

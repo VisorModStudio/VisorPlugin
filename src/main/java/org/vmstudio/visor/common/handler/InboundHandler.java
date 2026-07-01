@@ -3,7 +3,7 @@ package org.vmstudio.visor.common.handler;
 import org.vmstudio.visor.common.platform.PlatformPlayer;
 import org.vmstudio.visor.common.platform.VisorLogger;
 import org.vmstudio.visor.common.session.*;
-import org.vmstudio.visor.common.settings.SupportedMovement;
+import org.vmstudio.visor.api.player.SupportedMovement;
 import org.vmstudio.visor.common.settings.VisorSettings;
 import org.vmstudio.visor.protocol.VisorCodec;
 import org.vmstudio.visor.protocol.VisorInbound;
@@ -51,6 +51,7 @@ public final class InboundHandler {
 
         if (payload instanceof PoseDataIn p) {
             vr.setPose(p.pose());
+            vr.pushPoseSnapshot(p.pose(), sender.x(), sender.y(), sender.z());
         } else if (payload instanceof LeftHandedIn p) {
             vr.setLeftHanded(p.leftHanded());
         } else if (payload instanceof ActiveHandIn p) {

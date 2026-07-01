@@ -4,7 +4,9 @@ import java.nio.file.Path;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
+import org.vmstudio.visor.api.VisorAPI;
 import org.vmstudio.visor.bukkit.adapter.VersionAdapterRegistry;
+import org.vmstudio.visor.bukkit.api.VisorAPIImpl;
 import org.vmstudio.visor.bukkit.command.VisorCommand;
 import org.vmstudio.visor.bukkit.listener.PvpListener;
 import org.vmstudio.visor.bukkit.listener.VisorChannelListener;
@@ -15,8 +17,8 @@ import org.vmstudio.visor.bukkit.platform.BukkitPlatformServer;
 import org.vmstudio.visor.common.VisorServer;
 import org.vmstudio.visor.common.settings.SettingsLoader;
 import org.vmstudio.visor.common.settings.VisorSettings;
-import org.vmstudio.visor.nms.McVersion;
-import org.vmstudio.visor.nms.VersionAdapter;
+import org.vmstudio.visor.api.nms.McVersion;
+import org.vmstudio.visor.bukkit.adapter.VisorVersionAdapter;
 import org.vmstudio.visor.protocol.VisorProtocol;
 
 public final class VisorBukkitPlugin extends JavaPlugin {
@@ -34,7 +36,7 @@ public final class VisorBukkitPlugin extends JavaPlugin {
         logger.setDebug(settings.serverDebug());
 
         McVersion mc = McVersion.parse(getServer().getBukkitVersion());
-        VersionAdapter adapter = VersionAdapterRegistry.resolve(mc, logger);
+        VisorVersionAdapter adapter = VersionAdapterRegistry.resolve(mc, logger);
         adapter.init(this);
 
         BukkitPlatformServer platform = new BukkitPlatformServer(this, adapter, mc, core, logger);
@@ -51,6 +53,10 @@ public final class VisorBukkitPlugin extends JavaPlugin {
         getCommand("visor").setExecutor(visorCommand);
         getCommand("visor").setTabCompleter(visorCommand);
 
+        VisorAPIImpl api = new VisorAPIImpl(visor, mc);
+        visor.sessions().setListener(api);
+        VisorAPI.Instance.set(api);
+
         visor.start();
 
         logger.info("VisorPlugin enabled - MC {}, {} core, adapter '{}', protocol v{}.",
@@ -59,6 +65,7 @@ public final class VisorBukkitPlugin extends JavaPlugin {
 
     @Override
     public void onDisable(){
+        VisorAPI.Instance.set(null);
         if(visor != null){
             BukkitPlatformPlayer.removeAllDebug(getServer());
             if(prefsFile != null){

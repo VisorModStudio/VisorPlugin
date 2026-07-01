@@ -16,6 +16,12 @@ public interface PlatformPlayer {
 
     boolean isOnline();
 
+    double x();
+
+    double y();
+
+    double z();
+
     void sendPayload(byte[] channelData);
 
     void disconnect(String reason);

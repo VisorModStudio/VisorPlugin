@@ -48,7 +48,7 @@ public final class TrackerBroadcaster {
             currentUuids.add(t.uuid());
         }
         Set<UUID> newUuids = new HashSet<>(currentUuids);
-        newUuids.removeAll(vr.knownTrackers());
+        newUuids.removeAll(vr.getKnownTrackers());
 
         byte[] pose = VisorCodec.encode(new OtherPoseDataOut(uuid, vr.pose()));
         for(PlatformPlayer t : trackers){
@@ -56,12 +56,12 @@ public final class TrackerBroadcaster {
         }
 
         if(!newUuids.isEmpty()){
-            byte[] body = VisorCodec.encode(new OtherBodyTypeOut(uuid, vr.bodyType()));
-            byte[] left = VisorCodec.encode(new OtherLeftHandedOut(uuid, vr.leftHanded()));
-            byte[] scale = VisorCodec.encode(new OtherWorldScaleOut(uuid, vr.worldScale()));
-            byte[] height = VisorCodec.encode(new OtherFullHeightOut(uuid, vr.fullHeight()));
-            byte[] gun = VisorCodec.encode(new OtherGunAngleOut(uuid, vr.gunAngle()));
-            byte[] overlay = VisorCodec.encode(new OtherOverlayFocusedOut(uuid, vr.overlayFocused()));
+            byte[] body = VisorCodec.encode(new OtherBodyTypeOut(uuid, vr.getBodyType()));
+            byte[] left = VisorCodec.encode(new OtherLeftHandedOut(uuid, vr.isLeftHanded()));
+            byte[] scale = VisorCodec.encode(new OtherWorldScaleOut(uuid, vr.getWorldScale()));
+            byte[] height = VisorCodec.encode(new OtherFullHeightOut(uuid, vr.getFullHeight()));
+            byte[] gun = VisorCodec.encode(new OtherGunAngleOut(uuid, vr.getGunAngle()));
+            byte[] overlay = VisorCodec.encode(new OtherOverlayFocusedOut(uuid, vr.isOverlayFocused()));
             for(PlatformPlayer t : trackers){
                 if(!newUuids.contains(t.uuid())){
                     continue;
@@ -75,29 +75,29 @@ public final class TrackerBroadcaster {
             }
         }
 
-        if(!vr.bodyType().equals(vr.bodyTypeLastSent())){
-            sendDelta(trackers, newUuids, new OtherBodyTypeOut(uuid, vr.bodyType()));
-            vr.setBodyTypeLastSent(vr.bodyType());
+        if(!vr.getBodyType().equals(vr.getBodyTypeLastSent())){
+            sendDelta(trackers, newUuids, new OtherBodyTypeOut(uuid, vr.getBodyType()));
+            vr.setBodyTypeLastSent(vr.getBodyType());
         }
-        if(vr.leftHanded() != vr.leftHandedLastSent()){
-            sendDelta(trackers, newUuids, new OtherLeftHandedOut(uuid, vr.leftHanded()));
-            vr.setLeftHandedLastSent(vr.leftHanded());
+        if(vr.isLeftHanded() != vr.isLeftHandedLastSent()){
+            sendDelta(trackers, newUuids, new OtherLeftHandedOut(uuid, vr.isLeftHanded()));
+            vr.setLeftHandedLastSent(vr.isLeftHanded());
         }
-        if(vr.worldScale() != vr.worldScaleLastSent()){
-            sendDelta(trackers, newUuids, new OtherWorldScaleOut(uuid, vr.worldScale()));
-            vr.setWorldScaleLastSent(vr.worldScale());
+        if(vr.getWorldScale() != vr.getWorldScaleLastSent()){
+            sendDelta(trackers, newUuids, new OtherWorldScaleOut(uuid, vr.getWorldScale()));
+            vr.setWorldScaleLastSent(vr.getWorldScale());
         }
-        if(vr.fullHeight() != vr.fullHeightLastSent()){
-            sendDelta(trackers, newUuids, new OtherFullHeightOut(uuid, vr.fullHeight()));
-            vr.setFullHeightLastSent(vr.fullHeight());
+        if(vr.getFullHeight() != vr.getFullHeightLastSent()){
+            sendDelta(trackers, newUuids, new OtherFullHeightOut(uuid, vr.getFullHeight()));
+            vr.setFullHeightLastSent(vr.getFullHeight());
         }
-        if(vr.gunAngle() != vr.gunAngleLastSent()){
-            sendDelta(trackers, null, new OtherGunAngleOut(uuid, vr.gunAngle()));
-            vr.setGunAngleLastSent(vr.gunAngle());
+        if(vr.getGunAngle() != vr.getGunAngleLastSent()){
+            sendDelta(trackers, null, new OtherGunAngleOut(uuid, vr.getGunAngle()));
+            vr.setGunAngleLastSent(vr.getGunAngle());
         }
-        if(vr.overlayFocused() != vr.overlayFocusedLastSent()){
-            sendDelta(trackers, newUuids, new OtherOverlayFocusedOut(uuid, vr.overlayFocused()));
-            vr.setOverlayFocusedLastSent(vr.overlayFocused());
+        if(vr.isOverlayFocused() != vr.isOverlayFocusedLastSent()){
+            sendDelta(trackers, newUuids, new OtherOverlayFocusedOut(uuid, vr.isOverlayFocused()));
+            vr.setOverlayFocusedLastSent(vr.isOverlayFocused());
         }
 
         vr.setKnownTrackers(currentUuids);

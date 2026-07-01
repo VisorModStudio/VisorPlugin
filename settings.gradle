@@ -8,14 +8,18 @@ dependencyResolutionManagement {
     }
 }
 
-include 'nms-v1_20_R1'
-include 'nms-v1_21_1'
-include 'nms-v1_21_3'
-include 'nms-v1_21_4'
-include 'nms-v1_21_5'
-include 'nms-v1_21_6'
-include 'nms-v1_21_7'
-include 'nms-v1_21_8'
-include 'nms-v1_21_9'
-include 'nms-v1_21_10'
-include 'nms-v1_21_11'
+[
+     'nms-v1_20_R1',
+     'nms-v1_21_1',
+     'nms-v1_21_3',
+     'nms-v1_21_4',
+     'nms-v1_21_5',
+     'nms-v1_21_6',
+     'nms-v1_21_7',
+     'nms-v1_21_8',
+     'nms-v1_21_9',
+     'nms-v1_21_10',
+     'nms-v1_21_11'
+].each { name ->
+    include "versions:$name"
+}

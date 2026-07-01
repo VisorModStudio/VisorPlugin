@@ -16,18 +16,18 @@ import org.vmstudio.visor.common.platform.PlatformPlayer;
 import org.vmstudio.visor.common.platform.PlatformServer;
 import org.vmstudio.visor.common.platform.Scheduler;
 import org.vmstudio.visor.common.platform.VisorLogger;
-import org.vmstudio.visor.nms.McVersion;
-import org.vmstudio.visor.nms.VersionAdapter;
+import org.vmstudio.visor.api.nms.McVersion;
+import org.vmstudio.visor.bukkit.adapter.VisorVersionAdapter;
 
 public final class BukkitPlatformServer implements PlatformServer {
     private final Plugin plugin;
-    private final VersionAdapter adapter;
+    private final VisorVersionAdapter adapter;
     private final McVersion mcVersion;
     private final ServerCore core;
     private final VisorLogger logger;
     private final Scheduler scheduler;
 
-    public BukkitPlatformServer(Plugin plugin, VersionAdapter adapter, McVersion mcVersion,
+    public BukkitPlatformServer(Plugin plugin, VisorVersionAdapter adapter, McVersion mcVersion,
                                 ServerCore core, VisorLogger logger){
         this.plugin = plugin;
         this.adapter = adapter;
@@ -41,7 +41,7 @@ public final class BukkitPlatformServer implements PlatformServer {
         return plugin;
     }
 
-    public VersionAdapter adapter(){
+    public VisorVersionAdapter adapter(){
         return adapter;
     }
 

@@ -83,6 +83,21 @@ public final class BukkitPlatformPlayer implements PlatformPlayer {
     }
 
     @Override
+    public double x(){
+        return handle.getLocation().getX();
+    }
+
+    @Override
+    public double y(){
+        return handle.getLocation().getY();
+    }
+
+    @Override
+    public double z(){
+        return handle.getLocation().getZ();
+    }
+
+    @Override
     public void sendPayload(byte[] channelData){
         if(handle.isOnline()){
             handle.sendPluginMessage(server.plugin(), VisorProtocol.CHANNEL, channelData);

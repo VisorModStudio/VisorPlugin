@@ -18,8 +18,6 @@ import org.vmstudio.visor.protocol.toclient.ServerSettingsOut;
 import org.vmstudio.visor.protocol.value.Vec3f;
 
 public final class VisorServer {
-    private static final long VR_ONLY_KICK_DELAY_TICKS = 100L;
-
     private final PlatformServer platform;
     private final SessionManager sessions = new SessionManager();
     private final VrPrefsStore prefs = new VrPrefsStore();
@@ -77,7 +75,7 @@ public final class VisorServer {
             if(session == null || !session.vrActive()){
                 player.disconnect("This server is VR-only.");
             }
-        }, VR_ONLY_KICK_DELAY_TICKS);
+        }, 200L);
     }
 
     public void onQuit(UUID uuid){
