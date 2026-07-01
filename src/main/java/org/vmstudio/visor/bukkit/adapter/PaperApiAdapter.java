@@ -4,12 +4,11 @@ import java.util.Set;
 
 import org.bukkit.entity.Player;
 import org.vmstudio.visor.common.platform.VisorLogger;
-import org.vmstudio.visor.nms.McVersion;
-import org.vmstudio.visor.nms.VersionAdapter;
+import org.vmstudio.visor.api.nms.McVersion;
 import org.vmstudio.visor.protocol.DirectionValue;
 import org.vmstudio.visor.protocol.value.VBlockPos;
 
-public final class PaperApiAdapter implements VersionAdapter {
+public final class PaperApiAdapter implements VisorVersionAdapter {
     private static final double TRACKER_FALLBACK_RANGE = 256.0;
 
     private final VisorLogger logger;

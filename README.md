@@ -41,23 +41,24 @@ Permission: **`visor.admin`** (default: ops)
 ## Configuration
 `plugins/VisorPlugin/server_settings.yml`:
 
-| Key | Default | Description                                                             |
-|-----|---------|-------------------------------------------------------------------------|
-| `serverDebug` | `false` | Verbose logging of Visor                                                |
-| `vrOnly` | `false` | Kick non-VR players (ops exempt)                                        |
-| `twoHandedVR` | `false` | Enable the off-hand slot for two-handed VR                              |
-| `betterSwinging` | `true`  | VR-accurate melee attacks and block breaking                            |
-| `swingingRepairDelay` | `400`   | Ticks before an unfinished VR block break "heals"                       |
-| `roomCrawlingSupported` | `true`  | Allow room-scale crawling (forced crawl/swim pose)                      |
-| `roomClimbingSupported` | `true`  | Allow room-scale climbing (resets fall distance)                        |
-| `pvpVRvsVanilla` | `true`  | Allow PvP between a VR player and a non-VR player                       |
-| `pvpVRvsVR` | `true`  | Allow PvP between two VR players                                        |
-| `notifyPvpBlocked` | `false` | Message the attacker when PvP is blocked                                |
-| `creeperSwellDistance` | `1.75`  | Creepers swell within this distance of a VR player's head. (`0` disables) |
-| `supportedMovement` | `BOTH`  | `CONTROLLER`, `TELEPORT`, or `BOTH`                                     |
-| `teleportUpLimit` | `1`     | Teleport-move vertical-up limit (blocks)                                |
-| `teleportDownLimit` | `4`     | Teleport-move vertical-down limit (blocks)                              |
-| `teleportForwardLimit` | `16`    | Teleport-move forward limit (blocks)                                    |
+| Key                     | Default      | Description                                                             |
+|-------------------------|--------------|-------------------------------------------------------------------------|
+| `serverDebug`           | `false`      | Verbose logging of Visor                                                |
+| `vrOnly`                | `false`      | Kick non-VR players (ops exempt)                                        |
+| `twoHandedVR`           | `false`      | Enable the off-hand slot for two-handed VR                              |
+| `betterSwinging`        | `false`      | VR-accurate melee attacks and block breaking                            |
+| `swingingRepairDelay`   | `400`        | Ticks before an unfinished VR block break "heals"                       |
+| `roomCrawlingSupported` | `false`      | Allow room-scale crawling (forced crawl/swim pose)                      |
+| `roomClimbingSupported` | `false`      | Allow room-scale climbing (resets fall distance)                        |
+| `pvpVRvsVanilla`        | `true`       | Allow PvP between a VR player and a non-VR player                       |
+| `pvpVRvsVR`             | `true`       | Allow PvP between two VR players                                        |
+| `notifyPvpBlocked`      | `false`      | Message the attacker when PvP is blocked                                |
+| `creeperSwellDistance`  | `1.75`       | Creepers swell within this distance of a VR player's head. (`0` disables) |
+| `supportedMovement`     | `CONTROLLER` | `CONTROLLER`, `TELEPORT`, or `BOTH`                                     |
+| `teleportUpLimit`       | `1`          | Teleport-move vertical-up limit (blocks)                                |
+| `teleportDownLimit`     | `4`          | Teleport-move vertical-down limit (blocks)                              |
+| `teleportForwardLimit`  | `16`         | Teleport-move forward limit (blocks)                                    |
+| `trackersSupported`      | `false`       | Allow to use trackers                                                   |
 
 ```bash
 ./gradlew build
@@ -66,8 +67,8 @@ Permission: **`visor.admin`** (default: ops)
 
 ### Adding support for another Minecraft version
 1. Create an `nms-vXXX` module applying `paperweight-userdev` with that version's dev bundle
-2. Implement `VersionAdapter` (copy an existing leaf; fix any API differences)
-3. Register the class in `VersionAdapterRegistry.NMS_LEAVES` and add `runtimeOnly project(path: ':nms-vXXX', configuration: 'reobf')` to the root build
+2. Implement `VisorVersionAdapter` (copy an existing leaf; fix any API differences)
+3. Register the class in `VersionAdapterRegistry.NMS_LEAVES` and add `runtimeOnly project(path: ':versions:nms-vXXX', configuration: 'reobf')` to the root build
 
 ## Notes
 - **ViaVersion** is supported for cross-version play: `visor:channel` carries a version-independent byte

@@ -1,5 +1,7 @@
 package org.vmstudio.visor.common.settings;
 
+import org.vmstudio.visor.api.player.SupportedMovement;
+
 public record VisorSettings(
         boolean serverDebug,
         boolean vrOnly,
@@ -22,20 +24,20 @@ public record VisorSettings(
         return new VisorSettings(
                 false,
                 false,
-                true,
-                true,
+                false,
+                false,
                 400L,
-                true,
-                true,
+                false,
+                false,
                 true,
                 true,
                 false,
                 1.75,
-                SupportedMovement.BOTH,
+                SupportedMovement.CONTROLLER,
                 1,
                 4,
                 16,
-                true);
+                false);
     }
 
     public String toClientYaml(){
