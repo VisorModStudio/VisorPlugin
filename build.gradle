@@ -18,6 +18,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.38'
 
     runtimeOnly project(path: ':versions:nms-v1_20_R1', configuration: 'reobf')
+
     runtimeOnly project(path: ':versions:nms-v1_21_1', configuration: 'reobf')
     runtimeOnly project(path: ':versions:nms-v1_21_3', configuration: 'reobf')
     runtimeOnly project(path: ':versions:nms-v1_21_4', configuration: 'reobf')
@@ -28,8 +29,9 @@ dependencies {
     runtimeOnly project(path: ':versions:nms-v1_21_9', configuration: 'reobf')
     runtimeOnly project(path: ':versions:nms-v1_21_10', configuration: 'reobf')
     runtimeOnly project(path: ':versions:nms-v1_21_11', configuration: 'reobf')
-    runtimeOnly project(path: ':versions:nms-v26_1', configuration: 'reobf')
-    runtimeOnly project(path: ':versions:nms-v26_2', configuration: 'reobf')
+
+    runtimeOnly project(path: ':versions:nms-v26_1', configuration: 'mojangJar')
+    runtimeOnly project(path: ':versions:nms-v26_2', configuration: 'mojangJar')
 
     testImplementation platform('org.junit:junit-bom:5.11.3')
     testImplementation 'org.junit.jupiter:junit-jupiter'

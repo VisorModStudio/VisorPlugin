@@ -20,11 +20,11 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 configurations {
-    reobf {
+    mojangJar {
         canBeConsumed = true
         canBeResolved = false
     }
 }
 artifacts {
-    reobf(tasks.named('reobfJar'))
+    mojangJar(tasks.named('jar'))
 }
