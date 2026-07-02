@@ -3,14 +3,20 @@ plugins {
     id 'io.papermc.paperweight.userdev' version '2.0.0-beta.21'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
 dependencies {
-    paperweight.paperDevBundle('1.20.1-R0.1-SNAPSHOT')
+    paperweight.paperDevBundle('26.2.build.40-alpha')
     compileOnly project(':')
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    options.release.set(17)
+    options.release.set(25)
 }
 
 configurations {

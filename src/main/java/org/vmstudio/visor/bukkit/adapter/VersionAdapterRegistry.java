@@ -20,7 +20,9 @@ public final class VersionAdapterRegistry {
             new VersionedNms.Target("org.vmstudio.visor.nms.v1_21_8.NmsV1_21_8Adapter", 1, 21, 8, 8),
             new VersionedNms.Target("org.vmstudio.visor.nms.v1_21_9.NmsV1_21_9Adapter", 1, 21, 9, 9),
             new VersionedNms.Target("org.vmstudio.visor.nms.v1_21_10.NmsV1_21_10Adapter", 1, 21, 10, 10),
-            new VersionedNms.Target("org.vmstudio.visor.nms.v1_21_11.NmsV1_21_11Adapter", 1, 21, 11, 11)
+            new VersionedNms.Target("org.vmstudio.visor.nms.v1_21_11.NmsV1_21_11Adapter", 1, 21, 11, 11),
+            new VersionedNms.Target("org.vmstudio.visor.nms.v26_1.NmsV26_1Adapter", 26, 1, 0, 2),
+            new VersionedNms.Target("org.vmstudio.visor.nms.v26_2.NmsV26_2Adapter", 26, 2, 0, 0)
     );
 
     public static VisorVersionAdapter resolve(McVersion version, VisorLogger logger){

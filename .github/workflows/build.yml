@@ -16,12 +16,14 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: |
+            25
+            21
           cache: gradle
 
       - run: chmod +x ./gradlew
 
-      - run: ./gradlew build --max-workers=2 --no-daemon --stacktrace
+      - run: ./gradlew build --max-workers=2 --no-daemon --stacktrace -Porg.gradle.java.installations.fromEnv=JAVA_HOME_25_X64
 
       - uses: actions/upload-artifact@v4
         with:

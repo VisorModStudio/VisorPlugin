@@ -28,6 +28,8 @@ dependencies {
     runtimeOnly project(path: ':versions:nms-v1_21_9', configuration: 'reobf')
     runtimeOnly project(path: ':versions:nms-v1_21_10', configuration: 'reobf')
     runtimeOnly project(path: ':versions:nms-v1_21_11', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v26_1', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v26_2', configuration: 'reobf')
 
     testImplementation platform('org.junit:junit-bom:5.11.3')
     testImplementation 'org.junit.jupiter:junit-jupiter'

@@ -14,7 +14,7 @@ The **server-side plugin** to the [Visor](https://github.com/VisorModStudio/Viso
 ## Requirements
 - A **Visor**-modded client to connect in VR
 - A server on a supported core (see below)
-- Java version chosen by your Minecraft version (1.20.1-1.20.4 → Java 17, 1.20.5-1.21.11 → Java 21). Plugin itself is compiled to Java 17 bytecode, so a single jar loads on Java 17, 21 and 25
+- Java version chosen by your Minecraft version (1.20.1-1.20.4 → Java 17, 1.20.5-1.21.11 → Java 21, 26.1+ → Java 25). Plugin itself is compiled to Java 17 bytecode, so a single jar loads on Java 17, 21 and 25
 
 ## Supported platforms
 | Core | Support    |
