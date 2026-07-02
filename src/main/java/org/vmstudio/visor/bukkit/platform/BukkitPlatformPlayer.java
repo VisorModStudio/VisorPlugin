@@ -21,7 +21,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.vmstudio.visor.common.platform.PlatformPlayer;
 import org.vmstudio.visor.protocol.DirectionValue;
-import org.vmstudio.visor.protocol.VisorProtocol;
+import org.vmstudio.visor.api.VisorProtocol;
 import org.vmstudio.visor.protocol.value.PoseData;
 import org.vmstudio.visor.protocol.value.PoseElement;
 import org.vmstudio.visor.protocol.value.Quat;

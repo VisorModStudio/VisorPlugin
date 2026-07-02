@@ -2,7 +2,7 @@ package org.vmstudio.visor.protocol.toclient;
 
 import java.util.UUID;
 
-import org.vmstudio.visor.protocol.VisorByteBuf;
+import org.vmstudio.visor.api.network.VisorBuf;
 import org.vmstudio.visor.protocol.VisorOutbound;
 import org.vmstudio.visor.protocol.VisorPayloadId;
 
@@ -13,11 +13,11 @@ public record OtherGunAngleOut(UUID playerUUID, float gunAngle) implements Visor
     }
 
     @Override
-    public void write(VisorByteBuf buf){
+    public void write(VisorBuf buf){
         buf.writeUUID(playerUUID).writeFloat(gunAngle);
     }
 
-    public static OtherGunAngleOut read(VisorByteBuf buf){
+    public static OtherGunAngleOut read(VisorBuf buf){
         return new OtherGunAngleOut(buf.readUUID(), buf.readFloat());
     }
 }

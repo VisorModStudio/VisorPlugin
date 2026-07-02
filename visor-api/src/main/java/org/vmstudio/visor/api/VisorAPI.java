@@ -12,7 +12,6 @@ import org.vmstudio.visor.api.network.VisorChannelHandler;
 import org.vmstudio.visor.api.player.VRPlayer;
 import org.vmstudio.visor.api.player.VisorPlayer;
 import org.vmstudio.visor.api.nms.McVersion;
-import org.vmstudio.visor.protocol.VisorProtocol;
 
 /**
  * Central access point for all Visor Plugin API functionality

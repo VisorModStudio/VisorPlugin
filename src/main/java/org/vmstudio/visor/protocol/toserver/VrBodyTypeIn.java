@@ -1,6 +1,8 @@
 package org.vmstudio.visor.protocol.toserver;
 
-import org.vmstudio.visor.protocol.VisorByteBuf;
+import java.nio.charset.StandardCharsets;
+
+import org.vmstudio.visor.api.network.VisorBuf;
 import org.vmstudio.visor.protocol.VisorInbound;
 import org.vmstudio.visor.protocol.VisorPayloadId;
 
@@ -11,11 +13,11 @@ public record VrBodyTypeIn(String bodyType) implements VisorInbound {
     }
 
     @Override
-    public void write(VisorByteBuf buf){
-        buf.writeStringTail(bodyType);
+    public void write(VisorBuf buf){
+        buf.writeBytes(bodyType.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static VrBodyTypeIn read(VisorByteBuf buf){
-        return new VrBodyTypeIn(buf.readStringTail());
+    public static VrBodyTypeIn read(VisorBuf buf){
+        return new VrBodyTypeIn(new String(buf.readRemainingBytes(), StandardCharsets.UTF_8));
     }
 }

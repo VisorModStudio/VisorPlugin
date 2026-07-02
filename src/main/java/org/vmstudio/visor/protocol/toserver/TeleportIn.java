@@ -1,6 +1,6 @@
 package org.vmstudio.visor.protocol.toserver;
 
-import org.vmstudio.visor.protocol.VisorByteBuf;
+import org.vmstudio.visor.api.network.VisorBuf;
 import org.vmstudio.visor.protocol.VisorInbound;
 import org.vmstudio.visor.protocol.VisorPayloadId;
 
@@ -11,11 +11,11 @@ public record TeleportIn(float x, float y, float z) implements VisorInbound {
     }
 
     @Override
-    public void write(VisorByteBuf buf){
+    public void write(VisorBuf buf){
         buf.writeFloat(x).writeFloat(y).writeFloat(z);
     }
 
-    public static TeleportIn read(VisorByteBuf buf){
+    public static TeleportIn read(VisorBuf buf){
         return new TeleportIn(buf.readFloat(), buf.readFloat(), buf.readFloat());
     }
 }

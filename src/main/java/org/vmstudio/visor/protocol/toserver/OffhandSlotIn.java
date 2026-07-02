@@ -1,6 +1,6 @@
 package org.vmstudio.visor.protocol.toserver;
 
-import org.vmstudio.visor.protocol.VisorByteBuf;
+import org.vmstudio.visor.api.network.VisorBuf;
 import org.vmstudio.visor.protocol.VisorInbound;
 import org.vmstudio.visor.protocol.VisorPayloadId;
 
@@ -11,11 +11,11 @@ public record OffhandSlotIn(int slot) implements VisorInbound {
     }
 
     @Override
-    public void write(VisorByteBuf buf){
+    public void write(VisorBuf buf){
         buf.writeInt(slot);
     }
 
-    public static OffhandSlotIn read(VisorByteBuf buf){
+    public static OffhandSlotIn read(VisorBuf buf){
         return new OffhandSlotIn(buf.readInt());
     }
 }

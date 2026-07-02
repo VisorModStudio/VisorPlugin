@@ -1,5 +1,6 @@
 package org.vmstudio.visor.protocol;
 
+import org.vmstudio.visor.api.network.VisorBuf;
 import org.vmstudio.visor.protocol.toclient.BlockDamageOut;
 import org.vmstudio.visor.protocol.toclient.HandshakeOut;
 import org.vmstudio.visor.protocol.toclient.OffhandSlotOut;
@@ -33,17 +34,17 @@ public final class VisorCodec {
     private VisorCodec(){}
 
     public static byte[] encode(VisorPayload payload){
-        VisorByteBuf buf = new VisorByteBuf();
+        VisorBuf buf = VisorBuf.create();
         buf.writeByte(payload.id().byteOrdinal());
         payload.write(buf);
-        return buf.toByteArray();
+        return buf.toBytes();
     }
 
     public static VisorInbound decodeInbound(byte[] data){
         if(data == null || data.length == 0){
             return null;
         }
-        VisorByteBuf buf = new VisorByteBuf(data);
+        VisorBuf buf = VisorBuf.wrap(data);
         VisorPayloadId id = VisorPayloadId.fromByte(buf.readByte());
         if(id == null){
             return null;
@@ -73,7 +74,7 @@ public final class VisorCodec {
         if(data == null || data.length == 0){
             return null;
         }
-        VisorByteBuf buf = new VisorByteBuf(data);
+        VisorBuf buf = VisorBuf.wrap(data);
         VisorPayloadId id = VisorPayloadId.fromByte(buf.readByte());
         if(id == null){
             return null;

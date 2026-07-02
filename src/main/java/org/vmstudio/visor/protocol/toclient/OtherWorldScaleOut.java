@@ -2,7 +2,7 @@ package org.vmstudio.visor.protocol.toclient;
 
 import java.util.UUID;
 
-import org.vmstudio.visor.protocol.VisorByteBuf;
+import org.vmstudio.visor.api.network.VisorBuf;
 import org.vmstudio.visor.protocol.VisorOutbound;
 import org.vmstudio.visor.protocol.VisorPayloadId;
 
@@ -13,11 +13,11 @@ public record OtherWorldScaleOut(UUID playerUUID, float worldScale) implements V
     }
 
     @Override
-    public void write(VisorByteBuf buf){
+    public void write(VisorBuf buf){
         buf.writeUUID(playerUUID).writeFloat(worldScale);
     }
 
-    public static OtherWorldScaleOut read(VisorByteBuf buf){
+    public static OtherWorldScaleOut read(VisorBuf buf){
         return new OtherWorldScaleOut(buf.readUUID(), buf.readFloat());
     }
 }

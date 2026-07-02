@@ -1,4 +1,4 @@
-package org.vmstudio.visor.protocol;
+package org.vmstudio.visor.api;
 
 public final class VisorProtocol {
     private VisorProtocol(){}

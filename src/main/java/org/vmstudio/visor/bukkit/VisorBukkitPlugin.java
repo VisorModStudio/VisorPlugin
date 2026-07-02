@@ -19,7 +19,7 @@ import org.vmstudio.visor.common.settings.SettingsLoader;
 import org.vmstudio.visor.common.settings.VisorSettings;
 import org.vmstudio.visor.api.nms.McVersion;
 import org.vmstudio.visor.bukkit.adapter.VisorVersionAdapter;
-import org.vmstudio.visor.protocol.VisorProtocol;
+import org.vmstudio.visor.api.VisorProtocol;
 
 public final class VisorBukkitPlugin extends JavaPlugin {
     private VisorServer visor;

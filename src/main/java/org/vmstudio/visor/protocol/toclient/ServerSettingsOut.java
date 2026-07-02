@@ -1,6 +1,8 @@
 package org.vmstudio.visor.protocol.toclient;
 
-import org.vmstudio.visor.protocol.VisorByteBuf;
+import java.nio.charset.StandardCharsets;
+
+import org.vmstudio.visor.api.network.VisorBuf;
 import org.vmstudio.visor.protocol.VisorOutbound;
 import org.vmstudio.visor.protocol.VisorPayloadId;
 
@@ -11,11 +13,11 @@ public record ServerSettingsOut(String config) implements VisorOutbound {
     }
 
     @Override
-    public void write(VisorByteBuf buf){
-        buf.writeStringTail(config);
+    public void write(VisorBuf buf){
+        buf.writeBytes(config.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static ServerSettingsOut read(VisorByteBuf buf){
-        return new ServerSettingsOut(buf.readStringTail());
+    public static ServerSettingsOut read(VisorBuf buf){
+        return new ServerSettingsOut(new String(buf.readRemainingBytes(), StandardCharsets.UTF_8));
     }
 }
