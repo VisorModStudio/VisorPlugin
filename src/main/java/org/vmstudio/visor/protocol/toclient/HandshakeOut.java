@@ -1,6 +1,6 @@
 package org.vmstudio.visor.protocol.toclient;
 
-import org.vmstudio.visor.protocol.VisorByteBuf;
+import org.vmstudio.visor.api.network.VisorBuf;
 import org.vmstudio.visor.protocol.VisorOutbound;
 import org.vmstudio.visor.protocol.VisorPayloadId;
 
@@ -11,10 +11,10 @@ public record HandshakeOut() implements VisorOutbound {
     }
 
     @Override
-    public void write(VisorByteBuf buf){
+    public void write(VisorBuf buf){
     }
 
-    public static HandshakeOut read(VisorByteBuf buf){
+    public static HandshakeOut read(VisorBuf buf){
         return new HandshakeOut();
     }
 }

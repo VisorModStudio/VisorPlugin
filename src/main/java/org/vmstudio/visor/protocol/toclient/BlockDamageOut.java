@@ -2,7 +2,8 @@ package org.vmstudio.visor.protocol.toclient;
 
 import java.util.UUID;
 
-import org.vmstudio.visor.protocol.VisorByteBuf;
+import org.vmstudio.visor.api.network.VisorBuf;
+import org.vmstudio.visor.protocol.BlockPosCodec;
 import org.vmstudio.visor.protocol.VisorOutbound;
 import org.vmstudio.visor.protocol.VisorPayloadId;
 import org.vmstudio.visor.protocol.value.VBlockPos;
@@ -14,11 +15,12 @@ public record BlockDamageOut(UUID playerUUID, VBlockPos blockPos, int destroySta
     }
 
     @Override
-    public void write(VisorByteBuf buf){
-        buf.writeUUID(playerUUID).writeBlockPos(blockPos).writeInt(destroyStage);
+    public void write(VisorBuf buf){
+        buf.writeUUID(playerUUID);
+        BlockPosCodec.writeBlockPos(buf, blockPos).writeInt(destroyStage);
     }
 
-    public static BlockDamageOut read(VisorByteBuf buf){
-        return new BlockDamageOut(buf.readUUID(), buf.readBlockPos(), buf.readInt());
+    public static BlockDamageOut read(VisorBuf buf){
+        return new BlockDamageOut(buf.readUUID(), BlockPosCodec.readBlockPos(buf), buf.readInt());
     }
 }

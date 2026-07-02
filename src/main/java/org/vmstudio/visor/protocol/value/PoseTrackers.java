@@ -1,6 +1,6 @@
 package org.vmstudio.visor.protocol.value;
 
-import org.vmstudio.visor.protocol.VisorByteBuf;
+import org.vmstudio.visor.api.network.VisorBuf;
 
 public record PoseTrackers(
         PoseElement waist, PoseElement chest,
@@ -27,7 +27,7 @@ public record PoseTrackers(
         };
     }
 
-    public void write(VisorByteBuf buf){
+    public void write(VisorBuf buf){
         PoseElement[] e = ordered();
         int bitMask = 0;
         for(int i = 0; i < e.length; i++){
@@ -43,7 +43,7 @@ public record PoseTrackers(
         }
     }
 
-    public static PoseTrackers read(VisorByteBuf buf){
+    public static PoseTrackers read(VisorBuf buf){
         if(buf.readableBytes() <= 0){
             return empty();
         }

@@ -30,7 +30,7 @@ import org.vmstudio.visor.api.nms.McVersion;
 import org.vmstudio.visor.bukkit.adapter.VisorVersionAdapter;
 import org.vmstudio.visor.protocol.DirectionValue;
 import org.vmstudio.visor.protocol.VisorCodec;
-import org.vmstudio.visor.protocol.VisorProtocol;
+import org.vmstudio.visor.api.VisorProtocol;
 import org.vmstudio.visor.protocol.toclient.BlockDamageOut;
 import org.vmstudio.visor.protocol.value.VBlockPos;
 

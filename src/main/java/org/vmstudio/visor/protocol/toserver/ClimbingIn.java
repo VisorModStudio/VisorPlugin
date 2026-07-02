@@ -1,6 +1,6 @@
 package org.vmstudio.visor.protocol.toserver;
 
-import org.vmstudio.visor.protocol.VisorByteBuf;
+import org.vmstudio.visor.api.network.VisorBuf;
 import org.vmstudio.visor.protocol.VisorInbound;
 import org.vmstudio.visor.protocol.VisorPayloadId;
 
@@ -11,10 +11,10 @@ public record ClimbingIn() implements VisorInbound {
     }
 
     @Override
-    public void write(VisorByteBuf buf){
+    public void write(VisorBuf buf){
     }
 
-    public static ClimbingIn read(VisorByteBuf buf){
+    public static ClimbingIn read(VisorBuf buf){
         return new ClimbingIn();
     }
 }

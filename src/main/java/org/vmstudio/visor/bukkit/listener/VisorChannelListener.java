@@ -5,7 +5,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.jetbrains.annotations.NotNull;
 import org.vmstudio.visor.bukkit.platform.BukkitPlatformServer;
 import org.vmstudio.visor.common.VisorServer;
-import org.vmstudio.visor.protocol.VisorProtocol;
+import org.vmstudio.visor.api.VisorProtocol;
 
 public final class VisorChannelListener implements PluginMessageListener {
     private final BukkitPlatformServer platform;

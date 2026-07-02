@@ -1,5 +1,8 @@
 package org.vmstudio.visor.protocol;
 
+import org.vmstudio.visor.api.network.VisorBuf;
+import org.vmstudio.visor.protocol.value.VBlockPos;
+
 public final class BlockPosCodec {
     private BlockPosCodec(){}
 
@@ -31,5 +34,14 @@ public final class BlockPosCodec {
 
     public static int unpackZ(long packed){
         return (int) (packed << (64 - Z_OFFSET - PACKED_Z_LENGTH) >> (64 - PACKED_Z_LENGTH));
+    }
+
+    public static VisorBuf writeBlockPos(VisorBuf buf, VBlockPos pos){
+        return buf.writeLong(pack(pos.x(), pos.y(), pos.z()));
+    }
+
+    public static VBlockPos readBlockPos(VisorBuf buf){
+        long packed = buf.readLong();
+        return new VBlockPos(unpackX(packed), unpackY(packed), unpackZ(packed));
     }
 }

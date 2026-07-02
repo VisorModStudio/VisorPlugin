@@ -1,6 +1,6 @@
 package org.vmstudio.visor.protocol.toserver;
 
-import org.vmstudio.visor.protocol.VisorByteBuf;
+import org.vmstudio.visor.api.network.VisorBuf;
 import org.vmstudio.visor.protocol.VisorInbound;
 import org.vmstudio.visor.protocol.VisorPayloadId;
 
@@ -11,11 +11,11 @@ public record ActiveHandIn(boolean activeHandMain) implements VisorInbound {
     }
 
     @Override
-    public void write(VisorByteBuf buf){
+    public void write(VisorBuf buf){
         buf.writeBoolean(activeHandMain);
     }
 
-    public static ActiveHandIn read(VisorByteBuf buf){
+    public static ActiveHandIn read(VisorBuf buf){
         return new ActiveHandIn(buf.readBoolean());
     }
 }

@@ -2,7 +2,7 @@ package org.vmstudio.visor.protocol.toclient;
 
 import java.util.UUID;
 
-import org.vmstudio.visor.protocol.VisorByteBuf;
+import org.vmstudio.visor.api.network.VisorBuf;
 import org.vmstudio.visor.protocol.VisorOutbound;
 import org.vmstudio.visor.protocol.VisorPayloadId;
 import org.vmstudio.visor.protocol.value.PoseData;
@@ -14,12 +14,12 @@ public record OtherPoseDataOut(UUID playerUUID, PoseData pose) implements VisorO
     }
 
     @Override
-    public void write(VisorByteBuf buf){
+    public void write(VisorBuf buf){
         buf.writeUUID(playerUUID);
         pose.write(buf);
     }
 
-    public static OtherPoseDataOut read(VisorByteBuf buf){
+    public static OtherPoseDataOut read(VisorBuf buf){
         return new OtherPoseDataOut(buf.readUUID(), PoseData.read(buf));
     }
 }

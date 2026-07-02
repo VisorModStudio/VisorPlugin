@@ -7,7 +7,7 @@ import org.vmstudio.visor.api.player.SupportedMovement;
 import org.vmstudio.visor.common.settings.VisorSettings;
 import org.vmstudio.visor.protocol.VisorCodec;
 import org.vmstudio.visor.protocol.VisorInbound;
-import org.vmstudio.visor.protocol.VisorProtocol;
+import org.vmstudio.visor.api.VisorProtocol;
 import org.vmstudio.visor.protocol.toclient.HandshakeOut;
 import org.vmstudio.visor.protocol.toclient.OffhandSlotOut;
 import org.vmstudio.visor.protocol.toclient.RotationYOut;
