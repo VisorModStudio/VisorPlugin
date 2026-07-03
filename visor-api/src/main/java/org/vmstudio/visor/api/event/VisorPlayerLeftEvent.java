@@ -1,5 +1,6 @@
 package org.vmstudio.visor.api.event;
 
+import lombok.Getter;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -11,15 +12,13 @@ import org.vmstudio.visor.api.player.VisorPlayer;
 public final class VisorPlayerLeftEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
+    @Getter
     private final VisorPlayer visorPlayer;
 
     public VisorPlayerLeftEvent(VisorPlayer vrPlayer){
         this.visorPlayer = vrPlayer;
     }
 
-    public VisorPlayer getVisorPlayer(){
-        return visorPlayer;
-    }
 
     public boolean isVRPlayer(){
         return this.visorPlayer.isVR();

@@ -2,13 +2,16 @@ package org.vmstudio.visor.api;
 
 import java.util.Collection;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.vmstudio.visor.api.network.ChannelID;
 import org.vmstudio.visor.api.network.VisorChannel;
 import org.vmstudio.visor.api.network.VisorChannelHandler;
+import org.vmstudio.visor.api.network.VisorNetwork;
 import org.vmstudio.visor.api.player.VRPlayer;
 import org.vmstudio.visor.api.player.VisorPlayer;
 import org.vmstudio.visor.api.nms.McVersion;
@@ -17,6 +20,9 @@ import org.vmstudio.visor.api.nms.McVersion;
  * Central access point for all Visor Plugin API functionality
  */
 public interface VisorAPI {
+
+    Logger LOGGER = Logger.getLogger("VisorPlugin");
+
     /**
      * Get Visor API
      *
@@ -27,15 +33,6 @@ public interface VisorAPI {
             throw new IllegalStateException("VisorAPI is not available. Add [VisorPlugin] to depends in plugin.yml");
         }
         return Instance.api;
-    }
-
-    /**
-     * Visor core network/protocol version
-     *
-     * @return Network version from {@link VisorProtocol}
-     */
-    static int networkVersion(){
-        return VisorProtocol.CORE_NETWORK_VERSION;
     }
 
     /**
@@ -77,6 +74,7 @@ public interface VisorAPI {
 
     /**
      * Get all Visor players on server.
+     *
      * @return Visor players
      */
     Collection<VisorPlayer> getVisorPlayers();
@@ -104,29 +102,9 @@ public interface VisorAPI {
      */
     Collection<VRPlayer> getVRPlayers();
 
-    /**
-     * Register a custom channel for payloads with the matching Visor addon.
-     * Use this overload when you only send and receive typed
-     * packets via {@link VisorChannel#on} and {@link VisorChannel#send}
-     *
-     * @param owner the plugin that registering channel
-     * @param channel channel name in {@code namespace:path} form (like {@code "myaddon:hello"})
-     * @return registered channel
-     */
-    VisorChannel registerChannel(Plugin owner, String channel);
 
-    /**
-     * Register a custom channel with a raw handler.
-     * This is like {@link #registerChannel(Plugin, String)} but any inbound
-     * message whose first byte does not match a typed packet registered with
-     * {@link VisorChannel#on} is sending to {@code handler} with raw bytes
-     *
-     * @param owner the plugin that registering channel
-     * @param channel channel name in {@code namespace:path} form (like {@code "myaddon:hello"})
-     * @param handler fallback for payloads the typed packet layer does not handle
-     * @return registered channel
-     */
-    VisorChannel registerChannel(Plugin owner, String channel, VisorChannelHandler handler);
+    VisorChannel registerChannel(Plugin owner, ChannelID channel);
+    VisorChannel registerChannel(Plugin owner, ChannelID channel, VisorChannelHandler handler);
 
     @ApiStatus.Internal
     final class Instance {

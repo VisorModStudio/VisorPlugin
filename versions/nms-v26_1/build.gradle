@@ -11,7 +11,7 @@ java {
 
 dependencies {
     paperweight.paperDevBundle('26.1.2.build.72-stable')
-    compileOnly project(':')
+    compileOnly project(':visor-core')
 }
 
 tasks.withType(JavaCompile).configureEach {

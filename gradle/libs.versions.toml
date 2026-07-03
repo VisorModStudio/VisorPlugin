@@ -1,0 +1,31 @@
+
+
+[versions]
+#Gradle Addons
+shadow              = "9.0.0"
+
+
+#Annotations
+lombok                 = "1.18.30"
+jetbrains              = "23.0.0"
+
+#Core
+atum-config            = '1.2.0pre2'
+
+[plugins]
+shadow               = { id = "com.gradleup.shadow",  version.ref = "shadow" }
+
+
+[libraries]
+
+# Annotations
+lombok           = { module = "org.projectlombok:lombok",           version.ref = "lombok" }
+jetbrains        = { module = "org.jetbrains:annotations",         version.ref = "jetbrains" }
+
+# Core
+atum-config      = { module = "com.github.Phoenix-Ra:AtumConfiguration",    version.ref = "atum-config"}
+
+[bundles]
+annotations        = [ "lombok", "jetbrains" ]
+
+

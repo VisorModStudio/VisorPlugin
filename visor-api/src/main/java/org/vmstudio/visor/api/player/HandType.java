@@ -2,7 +2,7 @@ package org.vmstudio.visor.api.player;
 
 import org.jetbrains.annotations.NotNull;
 
-/** Which VR controller hand */
+
 public enum HandType {
     MAIN,
     OFFHAND;

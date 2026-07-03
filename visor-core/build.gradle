@@ -1,0 +1,50 @@
+plugins {
+    alias(libs.plugins.shadow)
+}
+
+dependencies {
+    api project(':visor-api')
+
+    implementation 'org.yaml:snakeyaml:2.3'
+
+    runtimeOnly project(path: ':versions:nms-v1_20_R1', configuration: 'reobf')
+
+    runtimeOnly project(path: ':versions:nms-v1_21_1', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_3', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_4', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_5', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_6', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_7', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_8', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_9', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_10', configuration: 'reobf')
+    runtimeOnly project(path: ':versions:nms-v1_21_11', configuration: 'reobf')
+
+    runtimeOnly project(path: ':versions:nms-v26_1', configuration: 'mojangJar')
+    runtimeOnly project(path: ':versions:nms-v26_2', configuration: 'mojangJar')
+}
+
+
+tasks.named('processResources') {
+    def props = [version: project.version.toString()]
+    inputs.properties(props)
+    filesMatching('plugin.yml') {
+        expand(props)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
+build {
+    dependsOn shadowJar
+}
+
+
+shadowJar {
+    archiveBaseName = 'VisorPlugin'
+    archiveClassifier = ''
+    relocate 'org.yaml.snakeyaml', 'org.vmstudio.libs.snakeyaml'
+}

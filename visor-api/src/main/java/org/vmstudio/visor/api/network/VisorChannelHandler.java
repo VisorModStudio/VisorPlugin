@@ -1,11 +1,10 @@
 package org.vmstudio.visor.api.network;
 
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * Receives raw payloads a client sent on a registered {@link VisorChannel}
- */
+
 @FunctionalInterface
 public interface VisorChannelHandler {
-    void onMessage(Player sender, byte[] payload);
+    void onMessage(@NotNull Player sender, byte[] payload);
 }

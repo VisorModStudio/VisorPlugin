@@ -1,5 +1,6 @@
 package org.vmstudio.visor.api.player;
 
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,6 +40,15 @@ public interface VRPlayerPose {
     @NotNull
     VRPose getOffhand();
 
+
+    /**
+     * Get trackers pose
+     *
+     * @return the trackers pose
+     */
+    @NotNull
+    VRPoseTrackers getTrackers();
+
     /**
      * Get the hand pose for the given hand type.
      * <p>
@@ -49,8 +59,9 @@ public interface VRPlayerPose {
      * @return the hand pose
      */
     @NotNull
-    default VRPose getHand(@NotNull HandType handType){
-        return handType == HandType.MAIN ? getMainHand() : getOffhand();
+    default VRPose getHand(@NotNull HandType handType) {
+        return handType == HandType.MAIN
+                ? getMainHand() : getOffhand();
     }
 
     /**
@@ -60,15 +71,27 @@ public interface VRPlayerPose {
      * @return pose
      */
     @Nullable
-    VRPose getPose(@NotNull VRBodyPartType bodyPart);
-
-    /**
-     * Get trackers pose
-     *
-     * @return the trackers pose
-     */
-    @NotNull
-    VRPoseTrackers getTrackers();
+    default VRPose getPose(@NotNull VRBodyPartType bodyPart){
+        return switch (bodyPart){
+            case HEAD -> getHmd();
+            case MAIN_HAND -> getMainHand();
+            case OFFHAND -> getOffhand();
+            case WAIST -> getTrackers().getWaist();
+            case CHEST -> getTrackers().getChest();
+            case LEFT_FOOT -> getTrackers().getLeftFoot();
+            case RIGHT_FOOT -> getTrackers().getRightFoot();
+            case LEFT_ANKLE -> getTrackers().getLeftAnkle();
+            case RIGHT_ANKLE -> getTrackers().getRightAnkle();
+            case LEFT_KNEE -> getTrackers().getLeftKnee();
+            case RIGHT_KNEE -> getTrackers().getRightKnee();
+            case LEFT_WRIST -> getTrackers().getLeftWrist();
+            case RIGHT_WRIST -> getTrackers().getRightWrist();
+            case LEFT_ELBOW -> getTrackers().getLeftElbow();
+            case RIGHT_ELBOW -> getTrackers().getRightElbow();
+            case LEFT_SHOULDER -> getTrackers().getLeftShoulder();
+            case RIGHT_SHOULDER -> getTrackers().getRightShoulder();
+        };
+    }
 
     /**
      * Get the origin to which pose data is relative to.
@@ -97,7 +120,6 @@ public interface VRPlayerPose {
      *   This defines how VR units map to world units.
      * </p>
      *
-     * (Always {@code 1.0} because server-side)
      * @return the world scale factor
      */
     float getWorldScale();
@@ -113,7 +135,6 @@ public interface VRPlayerPose {
      *   player model/ray tracing without interfering VR
      * </p>
      *
-     * (Always {@code 0} because server-side)
      * @return the player's rotation Y in radians
      */
     float getRotationY();

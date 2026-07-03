@@ -28,11 +28,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.vmstudio.visor.api.nms.McVersion;
 import org.vmstudio.visor.bukkit.adapter.VisorVersionAdapter;
-import org.vmstudio.visor.protocol.DirectionValue;
+import org.vmstudio.visor.api.network.buffer.DirectionValue;
 import org.vmstudio.visor.protocol.VisorCodec;
-import org.vmstudio.visor.api.VisorProtocol;
-import org.vmstudio.visor.protocol.toclient.BlockDamageOut;
-import org.vmstudio.visor.protocol.value.VBlockPos;
+import org.vmstudio.visor.api.network.VisorNetwork;
+import org.vmstudio.visor.protocol.toclient.BlockDamagePayloadToClient;
+import org.vmstudio.visor.api.network.buffer.VBlockPos;
 
 public final class NmsV26_2Adapter implements VisorVersionAdapter {
     private static final Logger LOG = Logger.getLogger("VisorPlugin/nms-v26_2");
@@ -243,15 +243,15 @@ public final class NmsV26_2Adapter implements VisorVersionAdapter {
         if(plugin == null){
             return;
         }
-        byte[] msg = VisorCodec.encode(new BlockDamageOut(
+        byte[] msg = VisorCodec.encode(new BlockDamagePayloadToClient(
                 sp.getUUID(),
                 new VBlockPos(pos.getX(), pos.getY(), pos.getZ()),
                 stage));
         Player self = sp.getBukkitEntity();
-        self.sendPluginMessage(plugin, VisorProtocol.CHANNEL, msg);
+        self.sendPluginMessage(plugin, VisorNetwork.CHANNEL, msg);
         for(Player t : trackers(self)){
             if(!t.equals(self)){
-                t.sendPluginMessage(plugin, VisorProtocol.CHANNEL, msg);
+                t.sendPluginMessage(plugin, VisorNetwork.CHANNEL, msg);
             }
         }
     }

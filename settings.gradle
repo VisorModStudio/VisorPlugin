@@ -1,11 +1,14 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        mavenLocal()
+    }
+}
 plugins {
-    // Lets Gradle auto-provision a JDK 25 toolchain (needed by the 26.1+ leaves)
-    // when one isn't already installed locally.
+    // JDK 25 toolchain (needed by the 26.1+ leaves)
     id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
 }
-
-rootProject.name = 'VisorPlugin'
-
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
@@ -14,22 +17,20 @@ dependencyResolutionManagement {
     }
 }
 
+rootProject.name = 'VisorPlugin'
 include 'visor-api'
+include 'visor-core'
+include "versions:nms-v1_20_R1"
+include "versions:nms-v1_21_1"
+include "versions:nms-v1_21_3"
+include "versions:nms-v1_21_4"
+include "versions:nms-v1_21_5"
+include "versions:nms-v1_21_6"
+include "versions:nms-v1_21_7"
+include "versions:nms-v1_21_8"
+include "versions:nms-v1_21_9"
+include "versions:nms-v1_21_10"
+include "versions:nms-v1_21_11"
+include "versions:nms-v26_1"
+include "versions:nms-v26_2"
 
-[
-     'nms-v1_20_R1',
-     'nms-v1_21_1',
-     'nms-v1_21_3',
-     'nms-v1_21_4',
-     'nms-v1_21_5',
-     'nms-v1_21_6',
-     'nms-v1_21_7',
-     'nms-v1_21_8',
-     'nms-v1_21_9',
-     'nms-v1_21_10',
-     'nms-v1_21_11',
-     'nms-v26_1',
-     'nms-v26_2'
-].each { name ->
-    include "versions:$name"
-}
