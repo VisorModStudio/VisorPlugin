@@ -1,6 +1,6 @@
 name: VisorPlugin
 version: '${version}'
-main: org.vmstudio.visor.bukkit.VisorBukkitPlugin
+main: org.vmstudio.visorplugin.bukkit.VisorBukkitPlugin
 api-version: '1.20'
 folia-supported: true
 authors: [vmstudio]

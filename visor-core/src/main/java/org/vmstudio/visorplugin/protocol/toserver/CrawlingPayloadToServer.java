@@ -1,0 +1,22 @@
+package org.vmstudio.visorplugin.protocol.toserver;
+
+import org.jetbrains.annotations.NotNull;
+import org.vmstudio.visorplugin.api.network.buffer.VisorByteBuf;
+import org.vmstudio.visorplugin.protocol.VisorCorePayloadToServer;
+import org.vmstudio.visorplugin.protocol.VisorCorePayloadId;
+
+public record CrawlingPayloadToServer(boolean crawling) implements VisorCorePayloadToServer {
+    @Override
+    public @NotNull VisorCorePayloadId payloadType(){
+        return VisorCorePayloadId.CRAWLING;
+    }
+
+    @Override
+    public void onWrite(VisorByteBuf buf){
+        buf.writeBoolean(crawling);
+    }
+
+    public static CrawlingPayloadToServer read(VisorByteBuf buf){
+        return new CrawlingPayloadToServer(buf.readBoolean());
+    }
+}

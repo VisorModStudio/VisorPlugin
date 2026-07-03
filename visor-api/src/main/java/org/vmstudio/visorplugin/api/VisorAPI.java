@@ -1,0 +1,119 @@
+package org.vmstudio.visorplugin.api;
+
+import java.util.Collection;
+import java.util.UUID;
+import java.util.logging.Logger;
+
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
+import org.vmstudio.visorplugin.api.network.ChannelID;
+import org.vmstudio.visorplugin.api.network.VisorChannel;
+import org.vmstudio.visorplugin.api.network.VisorChannelHandler;
+import org.vmstudio.visorplugin.api.player.VRPlayer;
+import org.vmstudio.visorplugin.api.player.VisorPlayer;
+import org.vmstudio.visorplugin.api.nms.McVersion;
+
+/**
+ * Central access point for all Visor Plugin API functionality
+ */
+public interface VisorAPI {
+
+    Logger LOGGER = Logger.getLogger("VisorPlugin");
+
+    /**
+     * Get Visor API
+     *
+     * @return Visor API
+     */
+    static VisorAPI get(){
+        if(Instance.api == null){
+            throw new IllegalStateException("VisorAPI is not available. Add [VisorPlugin] to depends in plugin.yml");
+        }
+        return Instance.api;
+    }
+
+    /**
+     * Minecraft version this server runs
+     *
+     * @return Minecraft version
+     */
+    McVersion minecraftVersion();
+
+    /**
+     * If there is a VR player with specified uuid
+     *
+     * @return true/false
+     */
+    boolean isVRPlayer(UUID uuid);
+
+    /**
+     * If specified player has VR
+     *
+     * @return true/false
+     */
+    boolean isVRPlayer(Player player);
+
+    /**
+     * Get Visor player with specified uuid.
+     *
+     * @return Visor player or null if not found
+     */
+    @Nullable
+    VisorPlayer getVisorPlayer(UUID uuid);
+
+    /**
+     * Get Visor player from MC player.
+     *
+     * @return Visor player or null if not found
+     */
+    @Nullable
+    VisorPlayer getVisorPlayer(Player player);
+
+    /**
+     * Get all Visor players on server.
+     *
+     * @return Visor players
+     */
+    Collection<VisorPlayer> getVisorPlayers();
+
+    /**
+     * Get player in VR with specified uuid.
+     *
+     * @return VR player or null if not found
+     */
+    @Nullable
+    VRPlayer getVRPlayer(UUID uuid);
+
+    /**
+     * Get player in VR from MC player.
+     *
+     * @return VR player or null if not found
+     */
+    @Nullable
+    VRPlayer getVRPlayer(Player player);
+
+    /**
+     * Get Visor player from MC player.
+     *
+     * @return Visor player or null if not found
+     */
+    Collection<VRPlayer> getVRPlayers();
+
+
+    VisorChannel registerChannel(Plugin owner, ChannelID channel);
+    VisorChannel registerChannel(Plugin owner, ChannelID channel, VisorChannelHandler handler);
+
+    @ApiStatus.Internal
+    final class Instance {
+        private static VisorAPI api;
+
+        private Instance(){}
+
+        @ApiStatus.Internal
+        public static void set(VisorAPI api){
+            Instance.api = api;
+        }
+    }
+}
