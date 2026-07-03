@@ -6,7 +6,7 @@ shadow              = "9.0.0"
 
 
 #Annotations
-lombok                 = "1.18.30"
+lombok                 = "1.18.46"
 jetbrains              = "23.0.0"
 
 #Core
