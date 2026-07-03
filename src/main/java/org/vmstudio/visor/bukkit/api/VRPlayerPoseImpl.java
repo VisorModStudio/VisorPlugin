@@ -6,6 +6,9 @@ import java.util.Map;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.vmstudio.visor.api.player.VRPlayerPose;
 import org.vmstudio.visor.api.player.VRBodyPartType;
 import org.vmstudio.visor.api.player.VRPose;
@@ -16,26 +19,26 @@ import org.vmstudio.visor.protocol.value.Quat;
 import org.vmstudio.visor.protocol.value.Vec3f;
 
 public final class VRPlayerPoseImpl implements VRPlayerPose {
-    private final Vector origin;
+    private final Vector3fc origin;
     private final Map<VRBodyPartType, VRPose> poses = new EnumMap<>(VRBodyPartType.class);
     private final VRPose hmd;
     private final VRPose mainHand;
     private final VRPose offhand;
-    private final Vector headPivot;
+    private final Vector3fc headPivot;
     private final float bodyYaw;
     private final VRPoseTrackers trackers;
 
     private VRPlayerPoseImpl(){
-        this.origin = new Vector(0, 0, 0);
+        this.origin = new Vector3f(0, 0, 0);
         this.hmd = VRPose.EMPTY;
         this.mainHand = VRPose.EMPTY;
         this.offhand = VRPose.EMPTY;
-        this.headPivot = new Vector(0, 0, 0);
+        this.headPivot = new Vector3f(0, 0, 0);
         this.bodyYaw = 0f;
         this.trackers = new PoseTrackersImpl(poses);
     }
 
-    private VRPlayerPoseImpl(PoseData pose, Vector origin){
+    private VRPlayerPoseImpl(PoseData pose, Vector3fc origin){
         this.origin = origin;
         VRBodyPartType[] parts = VRBodyPartType.values();
 
@@ -55,9 +58,9 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
             poses.put(VRBodyPartType.OFFHAND, o);
         }
 
-        PoseElement[] trackers = pose.trackers().toArray();
-        for(int i = 0; i < trackers.length; i++){
-            VRPose vp = element(trackers[i], origin);
+        PoseElement[] trackerElements = pose.trackers().toArray();
+        for(int i = 0; i < trackerElements.length; i++){
+            VRPose vp = element(trackerElements[i], origin);
             if(vp != null){
                 poses.put(parts[i + 3], vp);
             }
@@ -68,7 +71,7 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
         this.trackers = new PoseTrackersImpl(poses);
     }
 
-    public static VRPlayerPose of(PoseData pose, Vector origin){
+    public static VRPlayerPose of(PoseData pose, Vector3fc origin){
         return new VRPlayerPoseImpl(pose, origin);
     }
 
@@ -77,27 +80,28 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
     }
 
     @Nullable
-    private static VRPose element(PoseElement el, Vector origin){
+    private static VRPose element(PoseElement el, Vector3fc origin){
         if(el == null){
             return null;
         }
         Vec3f p = el.position();
         Quat q = el.orientation();
         return new VRPose(
-                new Vector(p.x() + origin.getX(), p.y() + origin.getY(), p.z() + origin.getZ()),
-                q.x(), q.y(), q.z(), q.w());
+                new Vector3f(p.x() + origin.x(), p.y() + origin.y(), p.z() + origin.z()),
+                new Quaternionf(q.x(), q.y(), q.z(), q.w()));
     }
 
-    private static Vector computeHeadPivot(PoseElement hmd, Vector origin){
+    private static Vector3fc computeHeadPivot(PoseElement hmd, Vector3fc origin){
         if(hmd == null){
-            return origin.clone();
+            return new Vector3f(origin);
         }
         Vec3f p = hmd.position();
-        Vector t = PoseMath.rotate(hmd.orientation(), 0.0, -0.1, 0.1);
-        return new Vector(
-                p.x() + origin.getX() + t.getX(),
-                p.y() + origin.getY() + t.getY(),
-                p.z() + origin.getZ() + t.getZ());
+        Quat q = hmd.orientation();
+        Vector3f t = new Quaternionf(q.x(), q.y(), q.z(), q.w()).transform(new Vector3f(0f, -0.1f, 0.1f));
+        return new Vector3f(
+                p.x() + origin.x() + t.x,
+                p.y() + origin.y() + t.y,
+                p.z() + origin.z() + t.z);
     }
 
     private static float computeBodyYaw(PoseData pose){
@@ -107,24 +111,25 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
         if(main == null || off == null || hmd == null){
             return 0f;
         }
-        Vector body = new Vector(
+        Vector3f body = new Vector3f(
                 off.position().x() - main.position().x(),
                 off.position().y() - main.position().y(),
                 off.position().z() - main.position().z());
-        if(body.lengthSquared() < 1e-12){
+        if(body.lengthSquared() < 1e-12f){
             return 0f;
         }
         body.normalize();
-        body = PoseMath.rotateY(body, -Math.PI / 2.0);
-        Vector hmdDir = PoseMath.rotate(hmd.orientation(), 0.0, 0.0, -1.0);
-        if(body.dot(hmdDir) < 0.0){
-            body.multiply(-1.0);
+        body.rotateY((float) (-Math.PI / 2.0));
+        Quat hq = hmd.orientation();
+        Vector3f hmdDir = new Quaternionf(hq.x(), hq.y(), hq.z(), hq.w()).transform(new Vector3f(0f, 0f, -1f));
+        if(body.dot(hmdDir) < 0f){
+            body.mul(-1f);
         }
-        Vector lerped = new Vector(
-                hmdDir.getX() + (body.getX() - hmdDir.getX()) * 0.7,
-                hmdDir.getY() + (body.getY() - hmdDir.getY()) * 0.7,
-                hmdDir.getZ() + (body.getZ() - hmdDir.getZ()) * 0.7);
-        return (float) Math.atan2(-lerped.getX(), lerped.getZ());
+        Vector3f lerped = new Vector3f(
+                hmdDir.x + (body.x - hmdDir.x) * 0.7f,
+                hmdDir.y + (body.y - hmdDir.y) * 0.7f,
+                hmdDir.z + (body.z - hmdDir.z) * 0.7f);
+        return (float) Math.atan2(-lerped.x, lerped.z);
     }
 
     @Override
@@ -153,8 +158,13 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
     }
 
     @Override
-    public @NotNull Vector getOrigin(){
-        return origin.clone();
+    public @NotNull Vector3fc getOrigin(){
+        return origin;
+    }
+
+    @Override
+    public @NotNull Vector getOriginMc(){
+        return toMc(origin);
     }
 
     @Override
@@ -168,12 +178,21 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
     }
 
     @Override
-    public @NotNull Vector getHeadPivot(){
-        return headPivot.clone();
+    public @NotNull Vector3fc getHeadPivot(){
+        return headPivot;
+    }
+
+    @Override
+    public @NotNull Vector getHeadPivotMc(){
+        return toMc(headPivot);
     }
 
     @Override
     public float getBodyYaw(){
         return bodyYaw;
+    }
+
+    private static Vector toMc(Vector3fc v){
+        return new Vector(v.x(), v.y(), v.z());
     }
 }

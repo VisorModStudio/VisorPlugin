@@ -3,6 +3,7 @@ package org.vmstudio.visor.api.player;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3fc;
 
 /**
  * Provides pose data for VR player
@@ -80,7 +81,15 @@ public interface VRPlayerPose {
      * @return the origin
      */
     @NotNull
-    Vector getOrigin();
+    Vector3fc getOrigin();
+
+    /**
+     * {@link #getOrigin()} as a Bukkit {@link Vector}.
+     *
+     * @return the origin
+     */
+    @NotNull
+    Vector getOriginMc();
 
     /**
      * Get the world scale.
@@ -119,7 +128,15 @@ public interface VRPlayerPose {
      * @return the head pivot position
      */
     @NotNull
-    Vector getHeadPivot();
+    Vector3fc getHeadPivot();
+
+    /**
+     * {@link #getHeadPivot()} as a Bukkit {@link Vector}.
+     *
+     * @return the head pivot position
+     */
+    @NotNull
+    Vector getHeadPivotMc();
 
     /**
      * Get the body yaw in radians.

@@ -75,7 +75,7 @@ public interface VRPlayer extends VisorPlayer {
      * @return actual height
      */
     default float getActualHeight(){
-        return (float) getPoseDataRelative().getHeadPivot().getY();
+        return (float) getPoseDataRelative().getHeadPivot().y();
     }
 
     /**

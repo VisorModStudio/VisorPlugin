@@ -2,8 +2,8 @@ package org.vmstudio.visor.api.player;
 
 import java.util.List;
 
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 /**
  * Represents a bounded history of player poses sampled each tick.
@@ -50,7 +50,7 @@ public interface VRPoseHistory {
      * @throws IllegalArgumentException if {@code maxTicksBack} is negative
      *                                  or greater than {@link #HISTORY_LIMIT}
      */
-    Vector netMovement(VRBodyPartType bodyPart, int maxTicksBack);
+    Vector3f netMovement(VRBodyPartType bodyPart, int maxTicksBack);
 
     /**
      * Computes the net movement of the head pivot over the specified time window.
@@ -61,7 +61,7 @@ public interface VRPoseHistory {
      * @throws IllegalArgumentException if {@code maxTicksBack} is negative
      *                                  or greater than {@link #HISTORY_LIMIT}
      */
-    Vector headPivotNetMovement(int maxTicksBack);
+    Vector3f headPivotNetMovement(int maxTicksBack);
 
     /**
      * Computes the average per-tick movement speed of a body part.
@@ -98,7 +98,7 @@ public interface VRPoseHistory {
      *                                  or greater than {@link #HISTORY_LIMIT}
      */
     @Nullable
-    Vector averagePosition(VRBodyPartType bodyPart, int maxTicksBack);
+    Vector3f averagePosition(VRBodyPartType bodyPart, int maxTicksBack);
 
     /**
      * Computes the average head pivot position over the specified time window.
@@ -109,5 +109,5 @@ public interface VRPoseHistory {
      *                                  or greater than {@link #HISTORY_LIMIT}
      */
     @Nullable
-    Vector headPivotAveragePosition(int maxTicksBack);
+    Vector3f headPivotAveragePosition(int maxTicksBack);
 }

@@ -2,8 +2,9 @@ package org.vmstudio.visor.bukkit.api;
 
 import java.util.List;
 
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.vmstudio.visor.api.player.VRPlayerPose;
 import org.vmstudio.visor.api.player.VRPoseHistory;
 import org.vmstudio.visor.api.player.VRBodyPartType;
@@ -32,28 +33,28 @@ public class PoseHistoryImpl implements VRPoseHistory {
     }
 
     @Override
-    public Vector netMovement(VRBodyPartType bodyPart, int maxTicksBack){
+    public Vector3f netMovement(VRBodyPartType bodyPart, int maxTicksBack){
         checkTicksBack(maxTicksBack);
         if(history.size() <= 1){
-            return new Vector();
+            return new Vector3f();
         }
         int back = clamp(maxTicksBack);
-        Vector last = position(history.get(0), bodyPart);
-        Vector old = position(history.get(back), bodyPart);
+        Vector3fc last = position(history.get(0), bodyPart);
+        Vector3fc old = position(history.get(back), bodyPart);
         if(last == null || old == null){
-            return new Vector();
+            return new Vector3f();
         }
-        return last.clone().subtract(old);
+        return new Vector3f(last).sub(old);
     }
 
     @Override
-    public Vector headPivotNetMovement(int maxTicksBack){
+    public Vector3f headPivotNetMovement(int maxTicksBack){
         checkTicksBack(maxTicksBack);
         if(history.size() <= 1){
-            return new Vector();
+            return new Vector3f();
         }
         int back = clamp(maxTicksBack);
-        return history.get(0).getHeadPivot().subtract(history.get(back).getHeadPivot());
+        return new Vector3f(history.get(0).getHeadPivot()).sub(history.get(back).getHeadPivot());
     }
 
     @Override
@@ -66,8 +67,8 @@ public class PoseHistoryImpl implements VRPoseHistory {
         double sum = 0;
         int n = 0;
         for(int i = 0; i < back; i++){
-            Vector newer = position(history.get(i), bodyPart);
-            Vector older = position(history.get(i + 1), bodyPart);
+            Vector3fc newer = position(history.get(i), bodyPart);
+            Vector3fc older = position(history.get(i + 1), bodyPart);
             if(newer == null || older == null){
                 continue;
             }
@@ -94,55 +95,55 @@ public class PoseHistoryImpl implements VRPoseHistory {
     }
 
     @Override
-    public @Nullable Vector averagePosition(VRBodyPartType bodyPart, int maxTicksBack){
+    public @Nullable Vector3f averagePosition(VRBodyPartType bodyPart, int maxTicksBack){
         checkTicksBack(maxTicksBack);
         if(history.isEmpty()){
             return null;
         }
         int back = clamp(maxTicksBack);
-        double sx = 0;
-        double sy = 0;
-        double sz = 0;
+        float sx = 0;
+        float sy = 0;
+        float sz = 0;
         int n = 0;
         int count = 0;
         for(VRPlayerPose pose : history){
-            Vector p = position(pose, bodyPart);
+            Vector3fc p = position(pose, bodyPart);
             if(p != null){
-                sx += p.getX();
-                sy += p.getY();
-                sz += p.getZ();
+                sx += p.x();
+                sy += p.y();
+                sz += p.z();
                 n++;
             }
             if(++count >= back){
                 break;
             }
         }
-        return n == 0 ? null : new Vector(sx / n, sy / n, sz / n);
+        return n == 0 ? null : new Vector3f(sx / n, sy / n, sz / n);
     }
 
     @Override
-    public @Nullable Vector headPivotAveragePosition(int maxTicksBack){
+    public @Nullable Vector3f headPivotAveragePosition(int maxTicksBack){
         checkTicksBack(maxTicksBack);
         if(history.isEmpty()){
             return null;
         }
         int back = clamp(maxTicksBack);
-        double sx = 0;
-        double sy = 0;
-        double sz = 0;
+        float sx = 0;
+        float sy = 0;
+        float sz = 0;
         int n = 0;
         int count = 0;
         for(VRPlayerPose pose : history){
-            Vector p = pose.getHeadPivot();
-            sx += p.getX();
-            sy += p.getY();
-            sz += p.getZ();
+            Vector3fc p = pose.getHeadPivot();
+            sx += p.x();
+            sy += p.y();
+            sz += p.z();
             n++;
             if(++count >= back){
                 break;
             }
         }
-        return n == 0 ? null : new Vector(sx / n, sy / n, sz / n);
+        return n == 0 ? null : new Vector3f(sx / n, sy / n, sz / n);
     }
 
     private void checkTicksBack(int ticksBack){
@@ -156,8 +157,8 @@ public class PoseHistoryImpl implements VRPoseHistory {
     }
 
     @Nullable
-    private static Vector position(VRPlayerPose pose, VRBodyPartType bodyPart){
+    private static Vector3fc position(VRPlayerPose pose, VRBodyPartType bodyPart){
         VRPose vp = pose.getPose(bodyPart);
-        return vp == null ? null : vp.offset();
+        return vp == null ? null : vp.getPosition();
     }
 }

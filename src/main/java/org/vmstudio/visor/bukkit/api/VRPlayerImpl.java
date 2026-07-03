@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.vmstudio.visor.api.player.HandType;
@@ -13,6 +12,7 @@ import org.vmstudio.visor.api.player.VRPlayer;
 import org.vmstudio.visor.api.player.VRPlayerPose;
 import org.vmstudio.visor.api.player.VRPose;
 import org.vmstudio.visor.api.player.VRPoseHistory;
+import org.joml.Vector3f;
 import org.vmstudio.visor.bukkit.platform.BukkitPlatformPlayer;
 import org.vmstudio.visor.common.session.PoseHistoryBuffer;
 import org.vmstudio.visor.common.session.VisorSession;
@@ -69,8 +69,10 @@ public final class VRPlayerImpl extends VisorPlayerImpl implements VRPlayer {
         return new PoseHistoryImpl(list);
     }
 
-    private static Vector originOf(PoseHistoryBuffer.Snapshot s, boolean worldSpace){
-        return worldSpace ? new Vector(s.ox(), s.oy(), s.oz()) : new Vector(0, 0, 0);
+    private static Vector3f originOf(PoseHistoryBuffer.Snapshot s, boolean worldSpace){
+        return worldSpace
+                ? new Vector3f((float) s.ox(), (float) s.oy(), (float) s.oz())
+                : new Vector3f(0, 0, 0);
     }
 
     @Override
