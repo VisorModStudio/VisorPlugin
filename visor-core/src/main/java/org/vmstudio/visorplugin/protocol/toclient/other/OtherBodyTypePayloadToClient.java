@@ -1,4 +1,4 @@
-package org.vmstudio.visorplugin.protocol.toclient;
+package org.vmstudio.visorplugin.protocol.toclient.other;
 
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;

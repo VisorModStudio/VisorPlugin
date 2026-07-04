@@ -10,13 +10,13 @@ import org.vmstudio.visorplugin.common.session.VisorSession;
 import org.vmstudio.visorplugin.common.session.VrState;
 import org.vmstudio.visorplugin.protocol.VisorCodec;
 import org.vmstudio.visorplugin.protocol.VisorCorePayloadToClient;
-import org.vmstudio.visorplugin.protocol.toclient.OtherBodyTypePayloadToClient;
-import org.vmstudio.visorplugin.protocol.toclient.OtherFullHeightPayloadToClient;
-import org.vmstudio.visorplugin.protocol.toclient.OtherGunAnglePayloadToClient;
-import org.vmstudio.visorplugin.protocol.toclient.OtherLeftHandedPayloadToClient;
-import org.vmstudio.visorplugin.protocol.toclient.OtherOverlayFocusedPayloadToClient;
-import org.vmstudio.visorplugin.protocol.toclient.OtherPoseDataPayloadToClient;
-import org.vmstudio.visorplugin.protocol.toclient.OtherWorldScalePayloadToClient;
+import org.vmstudio.visorplugin.protocol.toclient.other.OtherBodyTypePayloadToClient;
+import org.vmstudio.visorplugin.protocol.toclient.other.OtherFullHeightPayloadToClient;
+import org.vmstudio.visorplugin.protocol.toclient.other.OtherGunAnglePayloadToClient;
+import org.vmstudio.visorplugin.protocol.toclient.other.OtherLeftHandedPayloadToClient;
+import org.vmstudio.visorplugin.protocol.toclient.other.OtherOverlayFocusedPayloadToClient;
+import org.vmstudio.visorplugin.protocol.toclient.other.OtherPoseDataPayloadToClient;
+import org.vmstudio.visorplugin.protocol.toclient.other.OtherWorldScalePayloadToClient;
 
 public final class TrackerBroadcaster {
     private final SessionManager sessions;
