@@ -7,7 +7,7 @@ shadow              = "9.0.0"
 
 #Annotations
 lombok                 = "1.18.46"
-jetbrains              = "23.0.0"
+jetbrains              = "26.1.0"
 
 #Core
 atum-config            = '1.2.0pre2'
