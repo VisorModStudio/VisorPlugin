@@ -7,6 +7,6 @@ public final class VisorNetwork {
 
     public static final String CHANNEL = "visor:channel";
 
-    public static final int NETWORK_VERSION = 4; // 4 since Visor 0.4.0
+    public static final int NETWORK_VERSION = 5; // 5: since Visor 0.5.0
 
 }

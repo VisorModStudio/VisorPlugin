@@ -14,18 +14,18 @@ public interface VRPlayer extends VisorPlayer {
     VRPlayerPose getPoseDataPrevious();
 
     @NotNull
-    VRPlayerPose getPoseDataRelative();
+    VRPlayerPose getPoseDataRoom();
 
     @NotNull
     VRPlayerPose getPoseData();
 
     /**
-     * get pose history for relative type
+     * get pose history for room type
      *
      * @return pose history
      */
     @NotNull
-    VRPoseHistory getPoseHistoryRelative();
+    VRPoseHistory getPoseHistoryRoom();
 
     /**
      * get pose history for tick type
@@ -79,7 +79,7 @@ public interface VRPlayer extends VisorPlayer {
      * @return actual height
      */
     default float getActualHeight(){
-        return (float) getPoseDataRelative().getHeadPivot().y();
+        return getPoseDataRoom().getHeadPivot().y();
     }
 
     /**

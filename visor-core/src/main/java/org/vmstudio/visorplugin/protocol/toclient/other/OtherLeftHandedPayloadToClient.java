@@ -15,10 +15,20 @@ public record OtherLeftHandedPayloadToClient(UUID playerUUID, boolean leftHanded
 
     @Override
     public void onWrite(VisorByteBuf buf){
-        buf.writeUUID(playerUUID).writeBoolean(leftHanded);
+        buf.writeUUID(playerUUID);
+        writeSimple(buf);
+    }
+
+    public void writeSimple(VisorByteBuf buf){
+        buf.writeBoolean(leftHanded);
     }
 
     public static OtherLeftHandedPayloadToClient read(VisorByteBuf buf){
-        return new OtherLeftHandedPayloadToClient(buf.readUUID(), buf.readBoolean());
+        UUID uuid = buf.readUUID();
+        return readSimple(uuid, buf);
+    }
+
+    public static OtherLeftHandedPayloadToClient readSimple(UUID uuid, VisorByteBuf buf){
+        return new OtherLeftHandedPayloadToClient(uuid, buf.readBoolean());
     }
 }

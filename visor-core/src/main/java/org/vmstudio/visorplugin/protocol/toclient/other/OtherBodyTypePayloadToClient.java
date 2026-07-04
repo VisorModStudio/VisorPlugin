@@ -1,6 +1,5 @@
 package org.vmstudio.visorplugin.protocol.toclient.other;
 
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
@@ -16,10 +15,20 @@ public record OtherBodyTypePayloadToClient(UUID playerUUID, String bodyType) imp
 
     @Override
     public void onWrite(VisorByteBuf buf){
-        buf.writeUUID(playerUUID).writeBytes(bodyType.getBytes(StandardCharsets.UTF_8));
+        buf.writeUUID(playerUUID);
+        writeSimple(buf);
+    }
+
+    public void writeSimple(VisorByteBuf buf){
+        buf.writeString(bodyType);
     }
 
     public static OtherBodyTypePayloadToClient read(VisorByteBuf buf){
-        return new OtherBodyTypePayloadToClient(buf.readUUID(), new String(buf.readRemainingBytes(), StandardCharsets.UTF_8));
+        UUID uuid = buf.readUUID();
+        return readSimple(uuid, buf);
+    }
+
+    public static OtherBodyTypePayloadToClient readSimple(UUID uuid, VisorByteBuf buf){
+        return new OtherBodyTypePayloadToClient(uuid, buf.readString());
     }
 }

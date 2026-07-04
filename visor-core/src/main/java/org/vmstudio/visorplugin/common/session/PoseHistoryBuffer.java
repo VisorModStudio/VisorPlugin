@@ -8,11 +8,11 @@ import org.vmstudio.visorplugin.api.player.VRPoseHistory;
 import org.vmstudio.visorplugin.api.network.buffer.PoseDataBuffer;
 
 public final class PoseHistoryBuffer {
-    public record Snapshot(PoseDataBuffer pose, double ox, double oy, double oz){}
+    public record Snapshot(PoseDataBuffer pose, double ox, double oy, double oz, float rotationY){}
     private final Deque<Snapshot> history = new ArrayDeque<>();
 
-    public void push(PoseDataBuffer pose, double ox, double oy, double oz){
-        history.addFirst(new Snapshot(pose, ox, oy, oz));
+    public void push(PoseDataBuffer pose, double ox, double oy, double oz, float rotationY){
+        history.addFirst(new Snapshot(pose, ox, oy, oz, rotationY));
         while(history.size() > VRPoseHistory.HISTORY_LIMIT){
             history.removeLast();
         }

@@ -15,10 +15,20 @@ public record OtherGunAnglePayloadToClient(UUID playerUUID, float gunAngle) impl
 
     @Override
     public void onWrite(VisorByteBuf buf){
-        buf.writeUUID(playerUUID).writeFloat(gunAngle);
+        buf.writeUUID(playerUUID);
+        writeSimple(buf);
+    }
+
+    public void writeSimple(VisorByteBuf buf){
+        buf.writeFloat(gunAngle);
     }
 
     public static OtherGunAnglePayloadToClient read(VisorByteBuf buf){
-        return new OtherGunAnglePayloadToClient(buf.readUUID(), buf.readFloat());
+        UUID uuid = buf.readUUID();
+        return readSimple(uuid, buf);
+    }
+
+    public static OtherGunAnglePayloadToClient readSimple(UUID uuid, VisorByteBuf buf){
+        return new OtherGunAnglePayloadToClient(uuid, buf.readFloat());
     }
 }

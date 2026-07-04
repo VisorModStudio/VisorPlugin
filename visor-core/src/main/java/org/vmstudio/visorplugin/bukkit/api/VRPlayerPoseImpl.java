@@ -26,6 +26,7 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
     private final VRPose offhand;
     private final Vector3fc headPivot;
     private final float bodyYaw;
+    private final float rotationY;
     private final VRPoseTrackers trackers;
 
     private VRPlayerPoseImpl(){
@@ -35,16 +36,24 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
         this.offhand = VRPose.EMPTY;
         this.headPivot = new Vector3f(0, 0, 0);
         this.bodyYaw = 0f;
+        this.rotationY = 0f;
         this.trackers = new PoseTrackersImpl(poses);
     }
 
-    private VRPlayerPoseImpl(PoseDataBuffer pose, Vector3fc origin){
+    private VRPlayerPoseImpl(PoseDataBuffer pose, Vector3fc origin, float turnRotationY, boolean roomRelative){
         this.origin = origin;
+        this.rotationY = roomRelative ? 0f : turnRotationY;
+
+       float phi = this.rotationY - turnRotationY;
         VRBodyPartType[] parts = VRBodyPartType.values();
 
-        VRPose h = element(pose.hmd(), origin);
-        VRPose m = element(pose.mainHand(), origin);
-        VRPose o = element(pose.offhand(), origin);
+        PoseElementBuffer hmdEl = rot(pose.hmd(), phi);
+        PoseElementBuffer mainEl = rot(pose.mainHand(), phi);
+        PoseElementBuffer offEl = rot(pose.offhand(), phi);
+
+        VRPose h = element(hmdEl, origin);
+        VRPose m = element(mainEl, origin);
+        VRPose o = element(offEl, origin);
         this.hmd = h != null ? h : VRPose.EMPTY;
         this.mainHand = m != null ? m : VRPose.EMPTY;
         this.offhand = o != null ? o : VRPose.EMPTY;
@@ -60,23 +69,34 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
 
         PoseElementBuffer[] trackerElements = pose.trackers().toArray();
         for(int i = 0; i < trackerElements.length; i++){
-            VRPose vp = element(trackerElements[i], origin);
+            VRPose vp = element(rot(trackerElements[i], phi), origin);
             if(vp != null){
                 poses.put(parts[i + 3], vp);
             }
         }
 
-        this.headPivot = computeHeadPivot(pose.hmd(), origin);
-        this.bodyYaw = computeBodyYaw(pose);
+        this.headPivot = computeHeadPivot(hmdEl, origin);
+        this.bodyYaw = computeBodyYaw(hmdEl, mainEl, offEl);
         this.trackers = new PoseTrackersImpl(poses);
     }
 
-    public static VRPlayerPose of(PoseDataBuffer pose, Vector3fc origin){
-        return new VRPlayerPoseImpl(pose, origin);
+    public static VRPlayerPose of(PoseDataBuffer pose, Vector3fc origin, float turnRotationY, boolean roomRelative){
+        return new VRPlayerPoseImpl(pose, origin, turnRotationY, roomRelative);
     }
 
     public static VRPlayerPose empty(){
         return new VRPlayerPoseImpl();
+    }
+
+
+    @Nullable
+    private static PoseElementBuffer rot(@Nullable PoseElementBuffer el, float phi){
+        if(el == null || phi == 0f){
+            return el;
+        }
+        Vector3f p = new Vector3f(el.position()).rotateY(phi);
+        Quaternionf q = new Quaternionf().rotationY(phi).mul(el.orientation());
+        return new PoseElementBuffer(el.type(), p, q);
     }
 
     @Nullable
@@ -104,10 +124,7 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
                 p.z() + origin.z() + t.z);
     }
 
-    private static float computeBodyYaw(PoseDataBuffer pose){
-        PoseElementBuffer main = pose.mainHand();
-        PoseElementBuffer off = pose.offhand();
-        PoseElementBuffer hmd = pose.hmd();
+    private static float computeBodyYaw(PoseElementBuffer hmd, PoseElementBuffer main, PoseElementBuffer off){
         if(main == null || off == null || hmd == null){
             return 0f;
         }
@@ -174,7 +191,7 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
 
     @Override
     public float getRotationY(){
-        return 0f;
+        return rotationY;
     }
 
     @Override

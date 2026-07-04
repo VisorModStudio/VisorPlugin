@@ -15,10 +15,20 @@ public record OtherWorldScalePayloadToClient(UUID playerUUID, float worldScale) 
 
     @Override
     public void onWrite(VisorByteBuf buf){
-        buf.writeUUID(playerUUID).writeFloat(worldScale);
+        buf.writeUUID(playerUUID);
+        writeSimple(buf);
+    }
+
+    public void writeSimple(VisorByteBuf buf){
+        buf.writeFloat(worldScale);
     }
 
     public static OtherWorldScalePayloadToClient read(VisorByteBuf buf){
-        return new OtherWorldScalePayloadToClient(buf.readUUID(), buf.readFloat());
+        UUID uuid = buf.readUUID();
+        return readSimple(uuid, buf);
+    }
+
+    public static OtherWorldScalePayloadToClient readSimple(UUID uuid, VisorByteBuf buf){
+        return new OtherWorldScalePayloadToClient(uuid, buf.readFloat());
     }
 }

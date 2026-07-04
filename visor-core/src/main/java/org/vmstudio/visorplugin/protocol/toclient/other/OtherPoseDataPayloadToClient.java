@@ -17,10 +17,19 @@ public record OtherPoseDataPayloadToClient(UUID playerUUID, PoseDataBuffer pose)
     @Override
     public void onWrite(VisorByteBuf buf){
         buf.writeUUID(playerUUID);
+        writeSimple(buf);
+    }
+
+    public void writeSimple(VisorByteBuf buf){
         pose.serialize(buf);
     }
 
     public static OtherPoseDataPayloadToClient read(VisorByteBuf buf){
-        return new OtherPoseDataPayloadToClient(buf.readUUID(), PoseDataBuffer.deserialize(buf));
+        UUID uuid = buf.readUUID();
+        return readSimple(uuid, buf);
+    }
+
+    public static OtherPoseDataPayloadToClient readSimple(UUID uuid, VisorByteBuf buf){
+        return new OtherPoseDataPayloadToClient(uuid, PoseDataBuffer.deserialize(buf));
     }
 }

@@ -15,10 +15,20 @@ public record OtherFullHeightPayloadToClient(UUID playerUUID, float fullHeight) 
 
     @Override
     public void onWrite(VisorByteBuf buf){
-        buf.writeUUID(playerUUID).writeFloat(fullHeight);
+        buf.writeUUID(playerUUID);
+        writeSimple(buf);
+    }
+
+    public void writeSimple(VisorByteBuf buf){
+        buf.writeFloat(fullHeight);
     }
 
     public static OtherFullHeightPayloadToClient read(VisorByteBuf buf){
-        return new OtherFullHeightPayloadToClient(buf.readUUID(), buf.readFloat());
+        UUID uuid = buf.readUUID();
+        return readSimple(uuid, buf);
+    }
+
+    public static OtherFullHeightPayloadToClient readSimple(UUID uuid, VisorByteBuf buf){
+        return new OtherFullHeightPayloadToClient(uuid, buf.readFloat());
     }
 }

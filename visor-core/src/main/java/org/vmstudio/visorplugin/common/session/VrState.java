@@ -31,6 +31,7 @@ public final class VrState {
 
     private String bodyTypeLastSent;
     private boolean leftHandedLastSent;
+    private float rotationYLastSent;
     private float worldScaleLastSent = 1.0f;
     private float fullHeightLastSent = VRPlayer.DEFAULT_FULL_HEIGHT;
     private float gunAngleLastSent = VRPlayer.DEFAULT_GUN_ANGLE;
@@ -43,7 +44,7 @@ public final class VrState {
     }
 
     public void pushPoseSnapshot(PoseDataBuffer pose, double ox, double oy, double oz){
-        poseHistory.push(pose, ox, oy, oz);
+        poseHistory.push(pose, ox, oy, oz, rotationY);
     }
 
     public List<PoseHistoryBuffer.Snapshot> getPoseHistory(){

@@ -32,12 +32,12 @@ public final class VRPlayerImpl extends VisorPlayerImpl implements VRPlayer {
     }
 
     @Override
-    public @NotNull VRPlayerPose getPoseDataRelative(){
+    public @NotNull VRPlayerPose getPoseDataRoom(){
         return poseAt(0, false);
     }
 
     @Override
-    public @NotNull VRPoseHistory getPoseHistoryRelative(){
+    public @NotNull VRPoseHistory getPoseHistoryRoom(){
         return history(false);
     }
 
@@ -55,14 +55,14 @@ public final class VRPlayerImpl extends VisorPlayerImpl implements VRPlayer {
             return VRPlayerPoseImpl.empty();
         }
         PoseHistoryBuffer.Snapshot s = h.get(idx);
-        return VRPlayerPoseImpl.of(s.pose(), originOf(s, worldSpace));
+        return VRPlayerPoseImpl.of(s.pose(), originOf(s, worldSpace), s.rotationY(), !worldSpace);
     }
 
     private VRPoseHistory history(boolean worldSpace){
         List<PoseHistoryBuffer.Snapshot> h = session.vr().getPoseHistory();
         List<VRPlayerPose> list = new ArrayList<>(h.size());
         for(PoseHistoryBuffer.Snapshot s : h){
-            list.add(VRPlayerPoseImpl.of(s.pose(), originOf(s, worldSpace)));
+            list.add(VRPlayerPoseImpl.of(s.pose(), originOf(s, worldSpace), s.rotationY(), !worldSpace));
         }
         return new PoseHistoryImpl(list);
     }

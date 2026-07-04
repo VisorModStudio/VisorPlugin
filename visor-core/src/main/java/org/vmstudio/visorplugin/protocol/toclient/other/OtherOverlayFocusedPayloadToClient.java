@@ -15,10 +15,20 @@ public record OtherOverlayFocusedPayloadToClient(UUID playerUUID, boolean overla
 
     @Override
     public void onWrite(VisorByteBuf buf){
-        buf.writeUUID(playerUUID).writeBoolean(overlayFocused);
+        buf.writeUUID(playerUUID);
+        writeSimple(buf);
+    }
+
+    public void writeSimple(VisorByteBuf buf){
+        buf.writeBoolean(overlayFocused);
     }
 
     public static OtherOverlayFocusedPayloadToClient read(VisorByteBuf buf){
-        return new OtherOverlayFocusedPayloadToClient(buf.readUUID(), buf.readBoolean());
+        UUID uuid = buf.readUUID();
+        return readSimple(uuid, buf);
+    }
+
+    public static OtherOverlayFocusedPayloadToClient readSimple(UUID uuid, VisorByteBuf buf){
+        return new OtherOverlayFocusedPayloadToClient(uuid, buf.readBoolean());
     }
 }

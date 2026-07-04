@@ -16,6 +16,8 @@ import org.vmstudio.visorplugin.protocol.toclient.other.OtherGunAnglePayloadToCl
 import org.vmstudio.visorplugin.protocol.toclient.other.OtherLeftHandedPayloadToClient;
 import org.vmstudio.visorplugin.protocol.toclient.other.OtherOverlayFocusedPayloadToClient;
 import org.vmstudio.visorplugin.protocol.toclient.other.OtherPoseDataPayloadToClient;
+import org.vmstudio.visorplugin.protocol.toclient.other.OtherRotationYPayloadToClient;
+import org.vmstudio.visorplugin.protocol.toclient.other.OtherStartTrackingPayloadToClient;
 import org.vmstudio.visorplugin.protocol.toclient.other.OtherWorldScalePayloadToClient;
 
 public final class TrackerBroadcaster {
@@ -50,31 +52,27 @@ public final class TrackerBroadcaster {
         Set<UUID> newUuids = new HashSet<>(currentUuids);
         newUuids.removeAll(vr.getKnownTrackers());
 
-        byte[] pose = VisorCodec.encode(new OtherPoseDataPayloadToClient(uuid, vr.pose()));
-        for(PlatformPlayer t : trackers){
-            t.sendPayload(pose);
-        }
-
+        // ----- Send the initial VR state bundle to new trackers -----
         if(!newUuids.isEmpty()){
-            byte[] body = VisorCodec.encode(new OtherBodyTypePayloadToClient(uuid, vr.getBodyType()));
-            byte[] left = VisorCodec.encode(new OtherLeftHandedPayloadToClient(uuid, vr.isLeftHanded()));
-            byte[] scale = VisorCodec.encode(new OtherWorldScalePayloadToClient(uuid, vr.getWorldScale()));
-            byte[] height = VisorCodec.encode(new OtherFullHeightPayloadToClient(uuid, vr.getFullHeight()));
-            byte[] gun = VisorCodec.encode(new OtherGunAnglePayloadToClient(uuid, vr.getGunAngle()));
-            byte[] overlay = VisorCodec.encode(new OtherOverlayFocusedPayloadToClient(uuid, vr.isOverlayFocused()));
+            byte[] start = VisorCodec.encode(new OtherStartTrackingPayloadToClient(
+                    uuid,
+                    new OtherPoseDataPayloadToClient(uuid, vr.pose()),
+                    new OtherBodyTypePayloadToClient(uuid, vr.getBodyType()),
+                    new OtherLeftHandedPayloadToClient(uuid, vr.isLeftHanded()),
+                    new OtherRotationYPayloadToClient(uuid, vr.getRotationY()),
+                    new OtherWorldScalePayloadToClient(uuid, vr.getWorldScale()),
+                    new OtherFullHeightPayloadToClient(uuid, vr.getFullHeight()),
+                    new OtherGunAnglePayloadToClient(uuid, vr.getGunAngle()),
+                    new OtherOverlayFocusedPayloadToClient(uuid, vr.isOverlayFocused())
+            ));
             for(PlatformPlayer t : trackers){
-                if(!newUuids.contains(t.uuid())){
-                    continue;
+                if(newUuids.contains(t.uuid())){
+                    t.sendPayload(start);
                 }
-                t.sendPayload(body);
-                t.sendPayload(left);
-                t.sendPayload(scale);
-                t.sendPayload(height);
-                t.sendPayload(gun);
-                t.sendPayload(overlay);
             }
         }
 
+        // ----- Send changed state to existing trackers (new trackers already got it above) -----
         if(!vr.getBodyType().equals(vr.getBodyTypeLastSent())){
             sendDelta(trackers, newUuids, new OtherBodyTypePayloadToClient(uuid, vr.getBodyType()));
             vr.setBodyTypeLastSent(vr.getBodyType());
@@ -82,6 +80,10 @@ public final class TrackerBroadcaster {
         if(vr.isLeftHanded() != vr.isLeftHandedLastSent()){
             sendDelta(trackers, newUuids, new OtherLeftHandedPayloadToClient(uuid, vr.isLeftHanded()));
             vr.setLeftHandedLastSent(vr.isLeftHanded());
+        }
+        if(vr.getRotationY() != vr.getRotationYLastSent()){
+            sendDelta(trackers, newUuids, new OtherRotationYPayloadToClient(uuid, vr.getRotationY()));
+            vr.setRotationYLastSent(vr.getRotationY());
         }
         if(vr.getWorldScale() != vr.getWorldScaleLastSent()){
             sendDelta(trackers, newUuids, new OtherWorldScalePayloadToClient(uuid, vr.getWorldScale()));
@@ -98,6 +100,13 @@ public final class TrackerBroadcaster {
         if(vr.isOverlayFocused() != vr.isOverlayFocusedLastSent()){
             sendDelta(trackers, newUuids, new OtherOverlayFocusedPayloadToClient(uuid, vr.isOverlayFocused()));
             vr.setOverlayFocusedLastSent(vr.isOverlayFocused());
+        }
+
+        byte[] pose = VisorCodec.encode(new OtherPoseDataPayloadToClient(uuid, vr.pose()));
+        for(PlatformPlayer t : trackers){
+            if(!newUuids.contains(t.uuid())){
+                t.sendPayload(pose);
+            }
         }
 
         vr.setKnownTrackers(currentUuids);

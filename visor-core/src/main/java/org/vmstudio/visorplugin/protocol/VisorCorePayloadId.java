@@ -12,7 +12,9 @@ public enum VisorCorePayloadId {
     //TO CLIENT
     SERVER_SETTINGS,
     BLOCK_DAMAGE,
+    OTHER_VR_START_TRACKING,
     OTHER_VR_POSE_DATA,
+    OTHER_VR_ROTATION_Y,
     OTHER_VR_LEFT_HANDED,
     OTHER_VR_BODY_TYPE,
     OTHER_VR_WORLD_SCALE,
@@ -34,7 +36,6 @@ public enum VisorCorePayloadId {
     SWING_BLOCK,
     OVERLAY_FOCUSED,
     OTHER_VR_OVERLAY_FOCUSED;
-
 
 
 
