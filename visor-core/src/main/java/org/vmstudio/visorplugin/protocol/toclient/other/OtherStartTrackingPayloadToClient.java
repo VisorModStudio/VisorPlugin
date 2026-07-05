@@ -7,11 +7,7 @@ import org.vmstudio.visorplugin.api.network.buffer.VisorByteBuf;
 import org.vmstudio.visorplugin.protocol.VisorCorePayloadToClient;
 import org.vmstudio.visorplugin.protocol.VisorCorePayloadId;
 
-/**
- * Bundles the initial VR state sent to a client that just started tracking another
- * VR player. All sub-payloads share the single leading {@code playerUUID}, so each is
- * written/read via its {@code writeSimple}/{@code readSimple} (UUID omitted).
- */
+
 public record OtherStartTrackingPayloadToClient(UUID playerUUID,
                                                 OtherPoseDataPayloadToClient poseBuf,
                                                 OtherBodyTypePayloadToClient bodyTypeBuf,
