@@ -7,6 +7,8 @@ public record VisorSettings(
         boolean vrOnly,
         boolean twoHandedVR,
         boolean betterSwinging,
+        boolean roomscaleShieldBlocking,
+        boolean attacksWhileBlocking,
         long swingingRepairDelay,
         boolean roomCrawlingSupported,
         boolean roomClimbingSupported,
@@ -18,7 +20,10 @@ public record VisorSettings(
         int teleportUpLimit,
         int teleportDownLimit,
         int teleportForwardLimit,
-        boolean trackersSupported){
+        boolean bodyTrackersSupported,
+        boolean handTrackersSupported,
+        boolean bodyTrackersSendToOthers,
+        boolean handTrackersSendToOthers){
 
     public static VisorSettings defaults(){
         return new VisorSettings(
@@ -26,6 +31,8 @@ public record VisorSettings(
                 false,
                 false,
                 false,
+                false,
+                true,
                 400L,
                 false,
                 false,
@@ -37,14 +44,20 @@ public record VisorSettings(
                 1,
                 4,
                 16,
-                false);
+                false,
+                false,
+                true,
+                true);
     }
+
 
     public String toClientYaml(){
         return "vrOnly: " + vrOnly + '\n'
                 + "serverDebug: " + serverDebug + '\n'
                 + "twoHandedVR: " + twoHandedVR + '\n'
                 + "betterSwinging: " + betterSwinging + '\n'
+                + "roomscaleShieldBlocking: " + roomscaleShieldBlocking + '\n'
+                + "attacksWhileBlocking: " + attacksWhileBlocking + '\n'
                 + "roomCrawlingSupported: " + roomCrawlingSupported + '\n'
                 + "roomClimbingSupported: " + roomClimbingSupported + '\n'
                 + "pvpVRvsVanilla: " + pvpVRvsVanilla + '\n'
@@ -52,6 +65,10 @@ public record VisorSettings(
                 + "notifyPvpBlocked: " + notifyPvpBlocked + '\n'
                 + "creeperSwellDistance: " + creeperSwellDistance + '\n'
                 + "supportedMovement: " + supportedMovement.name() + '\n'
-                + "trackersSupported: " + trackersSupported + '\n';
+                + "teleportUpLimit: " + teleportUpLimit + '\n'
+                + "teleportDownLimit: " + teleportDownLimit + '\n'
+                + "teleportForwardLimit: " + teleportForwardLimit + '\n'
+                + "bodyTrackersSupported: " + bodyTrackersSupported + '\n'
+                + "handTrackersSupported: " + handTrackersSupported + '\n';
     }
 }

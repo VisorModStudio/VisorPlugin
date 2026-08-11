@@ -3,7 +3,6 @@ package org.vmstudio.visorplugin.bukkit.command;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Stream;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,6 +18,8 @@ import org.vmstudio.visorplugin.common.settings.VisorSettings;
 
 public final class VisorCommand implements CommandExecutor, TabCompleter {
     private static final String PERMISSION = "visor.admin";
+    private static final List<String> SUBCOMMANDS = List.of("reload", "status", "trackers", "hands");
+    private static final String USAGE = "§bVisor §7- /visor reload | status | trackers | hands";
 
     private final VisorServer visor;
     private final Path settingsFile;
@@ -34,7 +35,7 @@ public final class VisorCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                              @NotNull String label, String[] args){
         if(args.length == 0){
-            sender.sendMessage("§bVisor §7- /visor reload | status | trackers");
+            sender.sendMessage(USAGE);
             return true;
         }
         switch(args[0].toLowerCase(Locale.ROOT)){
@@ -60,11 +61,26 @@ public final class VisorCommand implements CommandExecutor, TabCompleter {
                 }
                 boolean on = visor.toggleTrackerDebug();
                 if(!on){
-                    BukkitPlatformPlayer.removeAllDebug(sender.getServer());
+                    BukkitPlatformPlayer.removeTrackerDebug(sender.getServer());
                 }
                 sender.sendMessage("§bVisor §7- tracker debug: " + (on ? "§aON" : "§cOFF"));
             }
-            default -> sender.sendMessage("§7Unknown subcommand. /visor reload | status | trackers");
+            case "hands" -> {
+                if(!sender.hasPermission(PERMISSION)){
+                    sender.sendMessage("§cYou don't have permission.");
+                    return true;
+                }
+                boolean on = visor.toggleHandDebug();
+                if(!on){
+                    BukkitPlatformPlayer.removeHandDebug(sender.getServer());
+                }
+                sender.sendMessage("§bVisor §7- hand debug: " + (on ? "§aON" : "§cOFF"));
+                if(on && !visor.settings().handTrackersSupported()){
+                    sender.sendMessage("§eheads up: §7handTrackersSupported is off,"
+                            + " clients won't send any hand data");
+                }
+            }
+            default -> sender.sendMessage("§7Unknown subcommand. " + USAGE);
         }
         return true;
     }
@@ -74,7 +90,7 @@ public final class VisorCommand implements CommandExecutor, TabCompleter {
                                       @NotNull String label, String[] args){
         if(args.length == 1){
             String prefix = args[0].toLowerCase(Locale.ROOT);
-            return Stream.of("reload", "status", "trackers").filter(s -> s.startsWith(prefix)).toList();
+            return SUBCOMMANDS.stream().filter(s -> s.startsWith(prefix)).toList();
         }
         return List.of();
     }

@@ -26,13 +26,14 @@ public final class VisorServer {
 
     private volatile VisorSettings settings;
     private volatile boolean trackerDebug;
+    private volatile boolean handDebug;
     private Cancellable tickTask;
 
     public VisorServer(PlatformServer platform, VisorSettings settings){
         this.platform = platform;
         this.settings = settings;
         this.handler = new InboundHandler(sessions, prefs, () -> this.settings, platform.logger());
-        this.broadcaster = new TrackerBroadcaster(sessions);
+        this.broadcaster = new TrackerBroadcaster(sessions, () -> this.settings);
     }
 
     public void start(){
@@ -82,6 +83,7 @@ public final class VisorServer {
         VisorSession session = sessions.get(uuid);
         if(session != null && session.vrActive()){
             session.player().clearTrackerDebug();
+            session.player().clearHandDebug();
         }
         sessions.remove(uuid);
     }
@@ -93,6 +95,15 @@ public final class VisorServer {
 
     public boolean trackerDebug(){
         return trackerDebug;
+    }
+
+    public boolean toggleHandDebug(){
+        handDebug = !handDebug;
+        return handDebug;
+    }
+
+    public boolean handDebug(){
+        return handDebug;
     }
 
     public VisorSettings settings(){
@@ -134,12 +145,16 @@ public final class VisorServer {
         session.player().tickEffects();
 
         VrState vr = session.vr();
-        if(!trackerDebug && s.creeperSwellDistance() > 0 && vr.pose() != null){
+        boolean debug = trackerDebug || handDebug;
+        if(!debug && s.creeperSwellDistance() > 0 && vr.pose() != null){
             Vector3fc hmd = vr.pose().hmd().position();
             session.player().swellNearbyCreepers(s.creeperSwellDistance(), hmd.x(), hmd.y(), hmd.z());
         }
         if(trackerDebug){
             session.player().showTrackerDebug(vr.pose());
+        }
+        if(handDebug){
+            session.player().showHandDebug(vr.pose());
         }
     }
 }

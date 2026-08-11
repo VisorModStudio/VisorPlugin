@@ -6,7 +6,8 @@ import org.vmstudio.visorplugin.api.player.VRBodyPartType;
 public record PoseDataBuffer(@NotNull PoseElementBuffer hmd,
                              @NotNull PoseElementBuffer mainHand,
                              @NotNull PoseElementBuffer offhand,
-                             @NotNull PoseTrackersBuffer trackers) implements VRDataBuffer{
+                             @NotNull PoseTrackersBuffer trackers,
+                             @NotNull PoseHandsBuffer hands) implements VRDataBuffer{
 
 
     @Override
@@ -15,6 +16,7 @@ public record PoseDataBuffer(@NotNull PoseElementBuffer hmd,
         this.mainHand.serialize(buffer);
         this.offhand.serialize(buffer);
         this.trackers.serialize(buffer);
+        this.hands.serialize(buffer);
     }
 
 
@@ -23,7 +25,8 @@ public record PoseDataBuffer(@NotNull PoseElementBuffer hmd,
         PoseElementBuffer mainHand = PoseElementBuffer.deserialize(VRBodyPartType.MAIN_HAND, byteBuf);
         PoseElementBuffer offhand = PoseElementBuffer.deserialize(VRBodyPartType.OFFHAND, byteBuf);
         PoseTrackersBuffer trackers = PoseTrackersBuffer.deserialize(byteBuf);
-        return new PoseDataBuffer(hmd, mainHand, offhand, trackers);
+        PoseHandsBuffer hands = PoseHandsBuffer.deserialize(byteBuf);
+        return new PoseDataBuffer(hmd, mainHand, offhand, trackers, hands);
     }
 
 

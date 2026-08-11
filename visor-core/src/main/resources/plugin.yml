@@ -10,7 +10,7 @@ load: POSTWORLD
 commands:
   visor:
     description: Visor admin commands
-    usage: /visor reload | status
+    usage: /visor reload | status | trackers | hands
     permission: visor.admin
 permissions:
   visor.admin:

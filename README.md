@@ -2,7 +2,11 @@
 
 _Crafted by VR enthusiasts for players and developers alike_
 
+**Alpha version, will be rewritten in autumn 2026**
+
 - - - - - - -
+
+
 
 The **server-side plugin** to the [Visor](https://github.com/VisorModStudio/Visor)
 
@@ -35,6 +39,8 @@ The **server-side plugin** to the [Visor](https://github.com/VisorModStudio/Viso
 |---------|-------------|
 | `/visor reload` | Reload `server_settings.yml` and push the new settings to connected clients |
 | `/visor status` | Show how many sessions are connected and how many are in VR |
+| `/visor trackers` | Toggle body tracker debug: mirrors each VR player's HMD + body trackers as 12 cm blocks floating in front of them |
+| `/visor hands` | Toggle hand tracking debug: same mirror, but the 26 skeleton joints per hand as 2 cm blocks (wool = left hand, concrete = right, one colour per finger) |
 
 Permission: **`visor.admin`** (default: ops)
 

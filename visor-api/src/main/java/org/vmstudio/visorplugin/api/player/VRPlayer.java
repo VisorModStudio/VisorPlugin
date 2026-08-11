@@ -19,6 +19,9 @@ public interface VRPlayer extends VisorPlayer {
     @NotNull
     VRPlayerPose getPoseData();
 
+
+    boolean hasPoseData();
+
     /**
      * get pose history for room type
      *

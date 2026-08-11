@@ -44,5 +44,9 @@ public interface PlatformPlayer {
 
     void clearTrackerDebug();
 
+    void showHandDebug(PoseDataBuffer pose);
+
+    void clearHandDebug();
+
     Set<PlatformPlayer> trackers();
 }

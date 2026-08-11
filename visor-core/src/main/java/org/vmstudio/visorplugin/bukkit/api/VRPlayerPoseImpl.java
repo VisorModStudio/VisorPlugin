@@ -13,9 +13,12 @@ import org.joml.Vector3fc;
 import org.vmstudio.visorplugin.api.player.VRPlayerPose;
 import org.vmstudio.visorplugin.api.player.VRBodyPartType;
 import org.vmstudio.visorplugin.api.player.VRPose;
+import org.vmstudio.visorplugin.api.player.VRPoseHands;
 import org.vmstudio.visorplugin.api.player.VRPoseTrackers;
 import org.vmstudio.visorplugin.api.network.buffer.PoseDataBuffer;
 import org.vmstudio.visorplugin.api.network.buffer.PoseElementBuffer;
+import org.vmstudio.visorplugin.api.network.buffer.PoseHandBuffer;
+import org.vmstudio.visorplugin.api.network.buffer.PoseHandJointBuffer;
 
 
 public final class VRPlayerPoseImpl implements VRPlayerPose {
@@ -28,6 +31,7 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
     private final float bodyYaw;
     private final float rotationY;
     private final VRPoseTrackers trackers;
+    private final VRPoseHands hands;
 
     private VRPlayerPoseImpl(){
         this.origin = new Vector3f(0, 0, 0);
@@ -38,6 +42,7 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
         this.bodyYaw = 0f;
         this.rotationY = 0f;
         this.trackers = new PoseTrackersImpl(poses);
+        this.hands = VRPoseHands.EMPTY;
     }
 
     private VRPlayerPoseImpl(PoseDataBuffer pose, Vector3fc origin, float turnRotationY, boolean roomRelative){
@@ -78,6 +83,9 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
         this.headPivot = computeHeadPivot(hmdEl, origin);
         this.bodyYaw = computeBodyYaw(hmdEl, mainEl, offEl);
         this.trackers = new PoseTrackersImpl(poses);
+        this.hands = new PoseHandsImpl(
+                hand(pose.hands().leftHand(), phi, origin),
+                hand(pose.hands().rightHand(), phi, origin));
     }
 
     public static VRPlayerPose of(PoseDataBuffer pose, Vector3fc origin, float turnRotationY, boolean roomRelative){
@@ -97,6 +105,22 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
         Vector3f p = new Vector3f(el.position()).rotateY(phi);
         Quaternionf q = new Quaternionf().rotationY(phi).mul(el.orientation());
         return new PoseElementBuffer(el.type(), p, q);
+    }
+
+    private static PoseHandsImpl.PoseHandImpl hand(PoseHandBuffer buf, float phi, Vector3fc origin){
+        PoseHandsImpl.PoseHandImpl out = new PoseHandsImpl.PoseHandImpl();
+        for(PoseHandJointBuffer joint : buf.joints()){
+            Vector3fc p = joint.position();
+            Quaternionfc q = joint.orientation();
+            if(phi != 0f){
+                p = new Vector3f(p).rotateY(phi);
+                q = new Quaternionf().rotationY(phi).mul(q);
+            }
+            out.put(joint.type(), new VRPose(
+                    new Vector3f(p.x() + origin.x(), p.y() + origin.y(), p.z() + origin.z()),
+                    new Quaternionf(q.x(), q.y(), q.z(), q.w())));
+        }
+        return out;
     }
 
     @Nullable
@@ -172,6 +196,11 @@ public final class VRPlayerPoseImpl implements VRPlayerPose {
     @Override
     public @NotNull VRPoseTrackers getTrackers(){
         return trackers;
+    }
+
+    @Override
+    public @NotNull VRPoseHands getHands(){
+        return hands;
     }
 
     @Override

@@ -26,6 +26,11 @@ public final class VRPlayerImpl extends VisorPlayerImpl implements VRPlayer {
     }
 
     @Override
+    public boolean hasPoseData(){
+        return session.vr().pose() != null;
+    }
+
+    @Override
     public @NotNull VRPlayerPose getPoseDataPrevious(){
         List<PoseHistoryBuffer.Snapshot> h = session.vr().getPoseHistory();
         return poseFrom(h, h.size() > 1 ? 1 : 0, true);

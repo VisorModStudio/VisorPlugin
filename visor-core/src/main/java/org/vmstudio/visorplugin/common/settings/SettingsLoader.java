@@ -42,6 +42,8 @@ public final class SettingsLoader {
                 bool(m, "vrOnly", d.vrOnly()),
                 bool(m, "twoHandedVR", d.twoHandedVR()),
                 bool(m, "betterSwinging", d.betterSwinging()),
+                bool(m, "roomscaleShieldBlocking", d.roomscaleShieldBlocking()),
+                bool(m, "attacksWhileBlocking", d.attacksWhileBlocking()),
                 lng(m, "swingingRepairDelay", d.swingingRepairDelay()),
                 bool(m, "roomCrawlingSupported", d.roomCrawlingSupported()),
                 bool(m, "roomClimbingSupported", d.roomClimbingSupported()),
@@ -53,7 +55,10 @@ public final class SettingsLoader {
                 intv(m, "teleportUpLimit", d.teleportUpLimit()),
                 intv(m, "teleportDownLimit", d.teleportDownLimit()),
                 intv(m, "teleportForwardLimit", d.teleportForwardLimit()),
-                bool(m, "trackersSupported", d.trackersSupported()));
+                bool(m, "bodyTrackersSupported", d.bodyTrackersSupported()),
+                bool(m, "handTrackersSupported", d.handTrackersSupported()),
+                bool(m, "bodyTrackersSendToOthers", d.bodyTrackersSendToOthers()),
+                bool(m, "handTrackersSendToOthers", d.handTrackersSendToOthers()));
     }
 
     private static boolean bool(Map<?, ?> m, String key, boolean def){
@@ -106,6 +111,10 @@ public final class SettingsLoader {
             betterSwinging: false
             swingingRepairDelay: 400
 
+            # Block with a raised shield without holding use
+            roomscaleShieldBlocking: false
+            attacksWhileBlocking: true
+
             roomCrawlingSupported: false
             roomClimbingSupported: false
 
@@ -118,10 +127,20 @@ public final class SettingsLoader {
             # CONTROLLER | TELEPORT | BOTH
             supportedMovement: CONTROLLER
 
+            # Teleport distance limits in blocks
             teleportUpLimit: 1
             teleportDownLimit: 4
             teleportForwardLimit: 16
 
-            trackersSupported: false
+            # [TRACKERS] - Potentially, more network consumption when enabled
+            bodyTrackersSupported: false
+            handTrackersSupported: false
+
+            # Send body tracker data to other players (if enabled, players with Visor mod\
+             and within VR player visibility range receive such data)
+            bodyTrackersSendToOthers: true
+            # Send hand tracking data to other players (if enabled, players with Visor mod\
+             and within VR player visibility range receive such data)
+            handTrackersSendToOthers: true
             """;
 }

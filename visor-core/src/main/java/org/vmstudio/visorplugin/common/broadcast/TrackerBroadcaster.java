@@ -3,11 +3,16 @@ package org.vmstudio.visorplugin.common.broadcast;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Supplier;
 
+import org.vmstudio.visorplugin.api.network.buffer.PoseDataBuffer;
+import org.vmstudio.visorplugin.api.network.buffer.PoseHandsBuffer;
+import org.vmstudio.visorplugin.api.network.buffer.PoseTrackersBuffer;
 import org.vmstudio.visorplugin.common.platform.PlatformPlayer;
 import org.vmstudio.visorplugin.common.session.SessionManager;
 import org.vmstudio.visorplugin.common.session.VisorSession;
 import org.vmstudio.visorplugin.common.session.VrState;
+import org.vmstudio.visorplugin.common.settings.VisorSettings;
 import org.vmstudio.visorplugin.protocol.VisorCodec;
 import org.vmstudio.visorplugin.protocol.VisorCorePayloadToClient;
 import org.vmstudio.visorplugin.protocol.toclient.other.OtherBodyTypePayloadToClient;
@@ -22,9 +27,11 @@ import org.vmstudio.visorplugin.protocol.toclient.other.OtherWorldScalePayloadTo
 
 public final class TrackerBroadcaster {
     private final SessionManager sessions;
+    private final Supplier<VisorSettings> settings;
 
-    public TrackerBroadcaster(SessionManager sessions){
+    public TrackerBroadcaster(SessionManager sessions, Supplier<VisorSettings> settings){
         this.sessions = sessions;
+        this.settings = settings;
     }
 
     public void broadcast(VisorSession session){
@@ -35,6 +42,7 @@ public final class TrackerBroadcaster {
         if(vr.pose() == null){
             return;
         }
+        PoseDataBuffer poseForOthers = poseForOthers(vr.pose());
 
         PlatformPlayer self = session.player();
         UUID uuid = self.uuid();
@@ -56,7 +64,7 @@ public final class TrackerBroadcaster {
         if(!newUuids.isEmpty()){
             byte[] start = VisorCodec.encode(new OtherStartTrackingPayloadToClient(
                     uuid,
-                    new OtherPoseDataPayloadToClient(uuid, vr.pose()),
+                    new OtherPoseDataPayloadToClient(uuid, poseForOthers),
                     new OtherBodyTypePayloadToClient(uuid, vr.getBodyType()),
                     new OtherLeftHandedPayloadToClient(uuid, vr.isLeftHanded()),
                     new OtherRotationYPayloadToClient(uuid, vr.getRotationY()),
@@ -102,7 +110,7 @@ public final class TrackerBroadcaster {
             vr.setOverlayFocusedLastSent(vr.isOverlayFocused());
         }
 
-        byte[] pose = VisorCodec.encode(new OtherPoseDataPayloadToClient(uuid, vr.pose()));
+        byte[] pose = VisorCodec.encode(new OtherPoseDataPayloadToClient(uuid, poseForOthers));
         for(PlatformPlayer t : trackers){
             if(!newUuids.contains(t.uuid())){
                 t.sendPayload(pose);
@@ -110,6 +118,23 @@ public final class TrackerBroadcaster {
         }
 
         vr.setKnownTrackers(currentUuids);
+    }
+
+
+    private PoseDataBuffer poseForOthers(PoseDataBuffer pose){
+        VisorSettings s = settings.get();
+        boolean stripTrackers = !s.bodyTrackersSendToOthers();
+        boolean stripHands = !s.handTrackersSendToOthers();
+        if(!stripTrackers && !stripHands){
+            return pose;
+        }
+        return new PoseDataBuffer(
+                pose.hmd(),
+                pose.mainHand(),
+                pose.offhand(),
+                stripTrackers ? PoseTrackersBuffer.createEmpty() : pose.trackers(),
+                stripHands ? PoseHandsBuffer.createEmpty() : pose.hands()
+        );
     }
 
     private static void sendDelta(Set<PlatformPlayer> trackers, Set<UUID> exclude, VisorCorePayloadToClient payload){
