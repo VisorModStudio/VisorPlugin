@@ -6,7 +6,7 @@ _Crafted by VR enthusiasts for players and developers alike_
 
 The **server-side plugin** to the [Visor](https://github.com/VisorModStudio/Visor)
 
-> Network protocol: **v4**<p>
+> Network protocol: **v5**<p>
 > Plugin messaging channel: **`visor:channel`**
 
 - - - - - - -
@@ -48,6 +48,8 @@ Permission: **`visor.admin`** (default: ops)
 | `twoHandedVR`           | `false`      | Enable the off-hand slot for two-handed VR                              |
 | `betterSwinging`        | `false`      | VR-accurate melee attacks and block breaking                            |
 | `swingingRepairDelay`   | `400`        | Ticks before an unfinished VR block break "heals"                       |
+| `roomscaleShieldBlocking` | `false`    | Block with a raised shield without holding use                          |
+| `attacksWhileBlocking`  | `true`       | Allow attacking while blocking with a shield                            |
 | `roomCrawlingSupported` | `false`      | Allow room-scale crawling (forced crawl/swim pose)                      |
 | `roomClimbingSupported` | `false`      | Allow room-scale climbing (resets fall distance)                        |
 | `pvpVRvsVanilla`        | `true`       | Allow PvP between a VR player and a non-VR player                       |
@@ -58,7 +60,10 @@ Permission: **`visor.admin`** (default: ops)
 | `teleportUpLimit`       | `1`          | Teleport-move vertical-up limit (blocks)                                |
 | `teleportDownLimit`     | `4`          | Teleport-move vertical-down limit (blocks)                              |
 | `teleportForwardLimit`  | `16`         | Teleport-move forward limit (blocks)                                    |
-| `trackersSupported`      | `false`       | Allow to use trackers                                                   |
+| `bodyTrackersSupported` | `false`      | Allow players to send full-body tracker data                            |
+| `handTrackersSupported` | `false`      | Allow players to send hand (finger skeleton) tracking data              |
+| `bodyTrackersSendToOthers` | `true`    | Relay body tracker data to nearby Visor players                         |
+| `handTrackersSendToOthers` | `true`    | Relay hand tracking data to nearby Visor players                        |
 
 ```bash
 ./gradlew build
@@ -78,3 +83,9 @@ Permission: **`visor.admin`** (default: ops)
 - - - - - - -
 
 Join our community: [Discord](https://discord.gg/wJX8sTDEdx)
+
+- - - - - - -
+
+Licensed under the [Mozilla Public License 2.0](LICENCE.md).
+
+Copyright (c) 2025-2026 Phoenix-Ra and VisorPlugin contributors
